@@ -1,14 +1,18 @@
 #include "stack.h"
 
 StackError stackInit(Stack* stk, size_t initialCapacity) {
-    assert(stk);
-    assert(initialCapacity);
+    StackError stackError = NaE;
+    if (!(stackError = stackVerify(stk)) 
+        && stackError != UninitializedStackError)
+            return stackError;
     
-    if (stk->isInitialized) return ReinitializationError;
+    if (stk->isInitialized)
+        return ReinitializationError;
 
     int* tempPtr = (int*) calloc(initialCapacity, sizeof(int));
-    assert(tempPtr);
-    if (!tempPtr) return MemoryAllocationError;
+    if (!tempPtr) 
+        return MemoryAllocationError;
+    
     stk->data = tempPtr;
     stk->size = 0;
     stk->capacity = initialCapacity;
@@ -21,11 +25,45 @@ StackError stackInit(Stack* stk, size_t initialCapacity) {
             .isInitialized = true};
     */
 
-    assert(stk->data);
-    assert(stk->size == 0);
-    assert(stk->capacity == initialCapacity);
-    assert(!stk->isDestroyed);
-    assert(stk->isInitialized);
+    /*
+    if (!(stackError = stackVerify(stk)))
+        return stackError;
 
+    return stackError;
+    */
+    
+    return stackVerify(stk);
+}
+
+StackError stackPush(Stack* stk, int value) {
+    StackError stackError = NaE;
+    if (!(stackError = stackVerify(stk)))
+        return stackError;
+    
+    size_t previousSize = stk->size;
+
+    stk->data[stk->size++] = value;
+
+    if (stk->size != previousSize + 1)
+        return IncrementationError;
+    if (stk->data[previousSize] != value)
+        return TransmutedValueError;
+
+    return stackVerify(stk);
+}
+
+StackError stackVerify(Stack* stk) {
+    if (!stk) 
+        return NullStackPointerError;
+    if (stk->isDestroyed) 
+        return DestroyedStackError;
+    if (!stk->isInitialized) 
+        return UninitializedStackError;
+    if (!stk->data) 
+        return NullDataPointerError;
+    if (stk->capacity == 0)
+        return InvalidCapacityError;
+    if (stk->size >= stk->capacity)
+        return SizeOutOfBoundsError;
     return NaE;
 }
