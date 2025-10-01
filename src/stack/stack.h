@@ -52,5 +52,6 @@ StackError stackInit(Stack* stk, size_t initialCapacity);
 StackError stackPush(Stack* stk, int value);
 int stackPop(Stack* stk, StackError* error = NULL);
 StackError stackVerify(Stack* stk);
+StackError stackDestroy(Stack* stk);
 
 #endif

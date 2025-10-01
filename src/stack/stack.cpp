@@ -84,11 +84,8 @@ int stackPop(Stack* stk, StackError* error) {
 }
 
 // another way (reverse? ranges?)
-StackError stackDestroy(Stack** stkPtr) {
-    if (!stkPtr) return NaE; //smth else
-    
+StackError stackDestroy(Stack* stk) {
     StackError stackError = NaE;
-    Stack* stk = *stkPtr;
     stackError = stackVerify(stk);
     switch (stackError) {
         case NaE:
@@ -109,8 +106,6 @@ StackError stackDestroy(Stack** stkPtr) {
     stk->capacity = 0;
     stk->isInitialized = false;
     stk->isDestroyed = true;
-
-    free(stkPtr);
 
     return NaE;
 }
