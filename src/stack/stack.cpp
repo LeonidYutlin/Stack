@@ -2,7 +2,7 @@
 
 StackError stackInit(Stack* stk, size_t initialCapacity) {
     StackError stackError = NaE;
-    if (!(stackError = stackVerify(stk)) 
+    if ((stackError = stackVerify(stk)) 
         && stackError != UninitializedStackError)
             return stackError;
     
@@ -18,6 +18,7 @@ StackError stackInit(Stack* stk, size_t initialCapacity) {
     stk->capacity = initialCapacity;
     stk->isDestroyed = false;
     stk->isInitialized = true;
+
     /* 
     A way of doing all this via cpp's default struct values
     *stk = {.data = tempPtr, 
@@ -31,13 +32,13 @@ StackError stackInit(Stack* stk, size_t initialCapacity) {
 
     return stackError;
     */
-    
+
     return stackVerify(stk);
 }
 
 StackError stackPush(Stack* stk, int value) {
     StackError stackError = NaE;
-    if (!(stackError = stackVerify(stk)))
+    if ((stackError = stackVerify(stk)))
         return stackError;
     
     size_t previousSize = stk->size;
@@ -54,21 +55,64 @@ StackError stackPush(Stack* stk, int value) {
 
 int stackPop(Stack* stk, StackError* error) {
     StackError stackError = NaE;
-    if (!(stackError = stackVerify(stk)))
-        return stackError;
+    if ((stackError = stackVerify(stk))) {
+        if (error) *error = stackError;
+        return STACK_POISON;
+    }
     
     size_t previousSize = stk->size;
 
-    int value = stk->data[stk->size];
+    if (stk->size == 0) {
+        if (error) *error = EmptyStackDataError;
+        return STACK_POISON;
+    }
+
+    int value = stk->data[--stk->size];
     stk->data[stk->size] = 0;
-    stk->size--;
 
-    if (stk->size != previousSize - 1)
-        return DecrementationError;
-    if (stk->data[previousSize] != 0)
-        return FailedPoisonError;
+    if (stk->size != previousSize - 1) {
+        if (error) *error = DecrementationError;
+        return value;
+    }
+    if (stk->data[previousSize] != 0) {
+        if (error) *error = FailedPopError;
+        return value;
+    }
 
-    return stackVerify(stk);
+    if (error) *error = stackVerify(stk);
+    return value;
+}
+
+// another way (reverse? ranges?)
+StackError stackDestroy(Stack** stkPtr) {
+    if (!stkPtr) return NaE; //smth else
+    
+    StackError stackError = NaE;
+    Stack* stk = *stkPtr;
+    stackError = stackVerify(stk);
+    switch (stackError) {
+        case NaE:
+        case NullDataPointerError:
+        case InvalidCapacityError:
+        case SizeOutOfBoundsError: break;
+        default: return stackError;
+    }
+
+    if (*stk->data) {
+        for (size_t i = 0; i < stk->capacity; i++)
+            stk->data[i] = STACK_POISON;
+        free(stk->data);
+        stk->data = NULL;
+    }
+
+    stk->size = 0;
+    stk->capacity = 0;
+    stk->isInitialized = false;
+    stk->isDestroyed = true;
+
+    free(stkPtr);
+
+    return NaE;
 }
 
 StackError stackVerify(Stack* stk) {

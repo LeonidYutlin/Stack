@@ -5,8 +5,13 @@
 
 #include <stddef.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include <assert.h>
 #include <stdbool.h>
+
+#ifndef STACK_POISON
+#define STACK_POISON 0xAbD06
+#endif
 
 typedef struct Stack {
     int* data = NULL;
@@ -38,13 +43,14 @@ enum StackError {
     IncrementationError         = -300,
     TransmutedValueError        = -301,
     DecrementationError         = -400,
-    FailedPoisonError           = -401,
-    UnidentifiedStackError      = -900,
+    FailedPopError              = -401,
+    EmptyStackDataError         = -402,
+    UnidentifiedStackError      = -900
 };
 
 StackError stackInit(Stack* stk, size_t initialCapacity);
 StackError stackPush(Stack* stk, int value);
-int stackPop(Stack* stk, StackError* error);
+int stackPop(Stack* stk, StackError* error = NULL);
 StackError stackVerify(Stack* stk);
 
-#endif STACK_H
+#endif
