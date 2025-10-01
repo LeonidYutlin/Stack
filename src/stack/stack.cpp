@@ -1,12 +1,31 @@
-#include <stddef.h>
-#include <stdbool.h>
+#include "stack.h"
 
-typedef struct Stack {
-    int* data = NULL;
-    size_t size = 0;
-    size_t capacity = 0;
-    bool isDestroyed = false;
-    bool isInitialized = false;
-} Stack;
+StackError stackInit(Stack* stk, size_t initialCapacity) {
+    assert(stk);
+    assert(initialCapacity);
+    
+    if (stk->isInitialized) return ReinitializationError;
 
-enum StackError
+    int* tempPtr = (int*) calloc(initialCapacity, sizeof(int));
+    assert(tempPtr);
+    if (!tempPtr) return MemoryAllocationError;
+    stk->data = tempPtr;
+    stk->size = 0;
+    stk->capacity = initialCapacity;
+    stk->isDestroyed = false;
+    stk->isInitialized = true;
+    /* 
+    A way of doing all this via cpp's default struct values
+    *stk = {.data = tempPtr, 
+            .capacity = initialCapacity, 
+            .isInitialized = true};
+    */
+
+    assert(stk->data);
+    assert(stk->size == 0);
+    assert(stk->capacity == initialCapacity);
+    assert(!stk->isDestroyed);
+    assert(stk->isInitialized);
+
+    return NaE;
+}
