@@ -52,6 +52,25 @@ StackError stackPush(Stack* stk, int value) {
     return stackVerify(stk);
 }
 
+int stackPop(Stack* stk, StackError* error) {
+    StackError stackError = NaE;
+    if (!(stackError = stackVerify(stk)))
+        return stackError;
+    
+    size_t previousSize = stk->size;
+
+    int value = stk->data[stk->size];
+    stk->data[stk->size] = 0;
+    stk->size--;
+
+    if (stk->size != previousSize - 1)
+        return DecrementationError;
+    if (stk->data[previousSize] != 0)
+        return FailedPoisonError;
+
+    return stackVerify(stk);
+}
+
 StackError stackVerify(Stack* stk) {
     if (!stk) 
         return NullStackPointerError;

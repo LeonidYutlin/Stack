@@ -37,10 +37,14 @@ enum StackError {
     InvalidInitialCapacityError = -202,
     IncrementationError         = -300,
     TransmutedValueError        = -301,
+    DecrementationError         = -400,
+    FailedPoisonError           = -401,
     UnidentifiedStackError      = -900,
 };
 
 StackError stackInit(Stack* stk, size_t initialCapacity);
 StackError stackPush(Stack* stk, int value);
+int stackPop(Stack* stk, StackError* error);
+StackError stackVerify(Stack* stk);
 
 #endif STACK_H
