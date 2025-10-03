@@ -15,6 +15,22 @@ typedef int StackUnit;
 #define STACK_POISON 0xAbD06
 #endif
 
+#ifndef CANARY_LEFT_COUNT
+#define CANARY_LEFT 1
+#endif
+
+#ifndef CANARY_RIGHT_COUNT
+#define CANARY_RIGHT 1
+#endif
+
+#ifndef CANARY_LEFT
+#define CANARY_LEFT 0xDEDDEDED
+#endif
+
+#ifndef CANARY_RIGHT
+#define CANARY_RIGHT 0xDEDEDDED
+#endif
+
 /*
     0 is okay
     -1xx is genericError
@@ -75,7 +91,6 @@ StackError stackInit(Stack* stk, size_t initialCapacity);
 StackError stackPush(Stack* stk, StackUnit value);
 StackUnit stackPop(Stack* stk, StackError* error = NULL);
 StackError stackVerify(Stack* stk);
-StackError stackDestroyPtr(Stack** stkPtr);
 StackError stackDestroy(Stack* stk);
 
 void stackDump(FILE* fileStream, Stack* stk, const char* fileName, int line);

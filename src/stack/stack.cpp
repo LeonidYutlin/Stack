@@ -183,25 +183,14 @@ StackUnit stackPop(Stack *stk, StackError *error){
     return value;
 }
 
-StackError stackDestroyPtr(Stack **stkPtr){
-    StackError stackError = NaE;
-    if (!stkPtr) {
-        stackError = stackDestroy(*stkPtr);
-        if (stackError == NaE)
-            *stkPtr = NULL;
-    }
-    return stackError;
-}
-
-StackError stackDestroy(Stack *stk){
+StackError stackDestroy(Stack* stk){
     StackError stackError = NaE;
     stackError = stackVerify(stk);
     switch (stackError) {
         case NaE:
         case NullDataPointerError:
         case InvalidCapacityError:
-        case SizeOutOfBoundsError:
-            break;
+        case SizeOutOfBoundsError: break;
         default:
             return stackError;
     }
@@ -219,7 +208,7 @@ StackError stackDestroy(Stack *stk){
     stk->isInitialized = false;
     stk->isDestroyed = true;
 
-    // free(stk);
+    //free(stk);
 
     return NaE;
 }

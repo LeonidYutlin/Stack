@@ -25,7 +25,7 @@ int main() {
     printf("Error code: %d\n", stackPush(&stk, 8));
 
     stackDump(dumpyard, &stk);
-    
+
     printf("Error code: %d\n", stackPush(&stk, 8));
     printf("Error code: %d\n", stackPush(&stk, 8));
     printf("Error code: %d\n", stackPush(&stk, 8));
@@ -55,7 +55,6 @@ int main() {
     stackDump(dumpyard, &stk);
 
     Stack* stkPtr = &stk;
-    stackDestroyPtr(&stkPtr);
     stackDestroy(&stk); //excessive, but the sanitizer does not think so
     stackDump(dumpyard, stkPtr);
 

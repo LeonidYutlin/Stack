@@ -1,14 +1,14 @@
 -----------------------
-[Q] SegFault? Not on my watch, bucko
+[Q] Canary Canary Do Thy Hear Me ?
 stackDump #0 called from src/main.cpp:18
-Stack [0x7b8b29d00060]
+Stack [0x7bbce5100060]
 {
 	size     = 3
 	capacity = 5
 	error = 0
 	isInitialized = 1
 	isDestroyed   = 0
-	data [0x7bbb2afe0040]
+	data [0x7bece63e0040]
 	{
 		*[0] = 10
 		*[1] = 5
@@ -19,16 +19,16 @@ Stack [0x7b8b29d00060]
 }
 -----------------------
 -----------------------
-[Q] OUR FOOD KEEPS BLOWING U-
+[Q] Is my stack gonna make it? Prolly not
 stackDump #1 called from src/main.cpp:27
-Stack [0x7b8b29d00060]
+Stack [0x7bbce5100060]
 {
 	size     = 8
 	capacity = 10
 	error = 0
 	isInitialized = 1
 	isDestroyed   = 0
-	data [0x7bcb2afe0010]
+	data [0x7bfce63e0010]
 	{
 		*[0] = 10
 		*[1] = 5
@@ -44,16 +44,16 @@ Stack [0x7b8b29d00060]
 }
 -----------------------
 -----------------------
-[Q] Boy oh boy I sure hope nothing bad has happened to my stack!
+[Q] stackDump soboleznuet
 stackDump #2 called from src/main.cpp:33
-Stack [0x7b8b29d00060]
+Stack [0x7bbce5100060]
 {
 	size     = 11
 	capacity = 20
 	error = 0
 	isInitialized = 1
 	isDestroyed   = 0
-	data [0x7bfb2afe0090]
+	data [0x7c2ce63e0090]
 	{
 		*[0] = 10
 		*[1] = 5
@@ -81,14 +81,14 @@ Stack [0x7b8b29d00060]
 -----------------------
 [Q] Appledog
 stackDump #3 called from src/main.cpp:41
-Stack [0x7b8b29d00060]
+Stack [0x7bbce5100060]
 {
 	size     = 10
 	capacity = 20
 	error = 0
 	isInitialized = 1
 	isDestroyed   = 0
-	data [0x7bfb2afe0090]
+	data [0x7c2ce63e0090]
 	{
 		*[0] = 10
 		*[1] = 5
@@ -114,16 +114,16 @@ Stack [0x7b8b29d00060]
 }
 -----------------------
 -----------------------
-[Q] Canary Canary Do Thy Hear Me ?
+[Q] Ouch! That hurt!
 stackDump #4 called from src/main.cpp:44
-Stack [0x7b8b29d00060]
+Stack [0x7bbce5100060]
 {
 	size     = 9
 	capacity = 20
 	error = 0
 	isInitialized = 1
 	isDestroyed   = 0
-	data [0x7bfb2afe0090]
+	data [0x7c2ce63e0090]
 	{
 		*[0] = 10
 		*[1] = 5
@@ -149,16 +149,16 @@ Stack [0x7b8b29d00060]
 }
 -----------------------
 -----------------------
-[Q] stackDump soboleznuet
+[Q] Now with 800% more poison!
 stackDump #5 called from src/main.cpp:50
-Stack [0x7b8b29d00060]
+Stack [0x7bbce5100060]
 {
 	size     = 9
 	capacity = 20
 	error = 0
 	isInitialized = 1
 	isDestroyed   = 0
-	data [0x7bfb2afe0090]
+	data [0x7c2ce63e0090]
 	{
 		*[0] = 10
 		*[1] = 5
@@ -184,16 +184,51 @@ Stack [0x7b8b29d00060]
 }
 -----------------------
 -----------------------
-[Q] So what are you gonna say at my funeral now that you've killed me
+[Q] None of these words are in the Bible
 stackDump #6 called from src/main.cpp:55
-Stack [0x7b8b29d00060]
+Stack [0x7bbce5100060]
 {
 	size     = 0
 	capacity = 20
 	error = 0
 	isInitialized = 1
 	isDestroyed   = 0
-	data [0x7bfb2afe0090]
+	data [0x7c2ce63e0090]
+	{
+		 [0] = 100
+		 [1] = 101
+		 [2] = -4
+		 [3] = 6
+		 [4] = 9
+		 [5] = 8
+		 [6] = 8
+		 [7] = 8
+		 [8] = 8
+		 [9] = 0
+		 [10] = 0
+		 [11] = 0
+		 [12] = 0
+		 [13] = 0
+		 [14] = 0
+		 [15] = 0
+		 [16] = 0
+		 [17] = 0
+		 [18] = 0
+		 [19] = 0
+	}
+}
+-----------------------
+-----------------------
+[Q] None of these words are in the Bible
+stackDump #7 called from src/main.cpp:60
+Stack [0x7bbce5100060]
+{
+	size     = 0
+	capacity = 20
+	error = 0
+	isInitialized = 1
+	isDestroyed   = 0
+	data [0x7c2ce63e0090]
 	{
 		 [0] = 100
 		 [1] = 101
@@ -220,35 +255,20 @@ Stack [0x7b8b29d00060]
 -----------------------
 -----------------------
 [Q] Ouch! That hurt!
-stackDump #7 called from src/main.cpp:60
-Stack [0x7b8b29d00060]
-{
-	size     = 0
-	capacity = 0
-	[!] error = -102
-	isInitialized = 0
-	isDestroyed   = 1
-	data [(nil)]
-	{
-	}
-}
------------------------
------------------------
-[Q] Aaaaand what has went wrong now?
 stackDump #8 called from src/main.cpp:62
 Stack [NULL] {}
 -----------------------
 -----------------------
-[Q] Now with 800% more poison!
+[Q] OUR FOOD KEEPS BLOWING U-
 stackDump #9 called from src/main.cpp:71
-Stack [0x7b8b29d000a0]
+Stack [0x7bbce51000a0]
 {
 	size     = 4
 	capacity = 5
 	error = 0
 	isInitialized = 1
 	isDestroyed   = 0
-	data [0x7bbb2afe0070]
+	data [0x7bece63e0070]
 	{
 		*[0] = 10
 		*[1] = 5
