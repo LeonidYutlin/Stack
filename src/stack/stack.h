@@ -8,7 +8,6 @@
 #include <stdbool.h>
 #include <time.h>
 #include <string.h>
-#include <limits.h>
 
 typedef int StackUnit;
 
@@ -28,6 +27,7 @@ enum StackError {
     InvalidCapacityError        = -104,
     SizeOutOfBoundsError        = -105,
     CorruptedCanaryError        = -106,
+    InvalidStackID              = -107,
     ReinitializationError       = -200,
     MemoryAllocationError       = -201,
     MemoryReallocationError     = -202,
@@ -40,24 +40,17 @@ enum StackError {
     UnidentifiedStackError      = -900
 };
 
-typedef struct Stack {
-    StackUnit* data = NULL;
-    size_t size = 0;
-    size_t capacity = 0;
-    size_t trueCapacity = 0;
-    StackError error = UninitializedStackError;
-    bool isDestroyed = false;
-    bool isInitialized = false;
-    //char state = '\0' 'd' 'i' 'e'
-} Stack;
+int stackInit(size_t initialCapacity);
+StackError stackPush(int stkID, StackUnit value);
+StackUnit stackPop(int stkID, StackError* error = NULL);
+StackError stackVerify(int stkID);
+StackError stackDestroy(int stkID);
 
-StackError stackInit(Stack* stk, size_t initialCapacity);
-StackError stackPush(Stack* stk, StackUnit value);
-StackUnit stackPop(Stack* stk, StackError* error = NULL);
-StackError stackVerify(Stack* stk);
-StackError stackDestroy(Stack* stk);
+size_t stackGetSize(int stkID, StackError* error = NULL);
+size_t stackGetCapacity(int stkID, StackError* error = NULL);
+StackError stackGetError(int stkID);
 
-void stackDump(FILE* fileStream, Stack* stk, const char* fileName, int line);
-#define stackDump(fileStream, stk) stackDump(fileStream, stk, __FILE__, __LINE__);
+void stackDump(FILE* fileStream, int stkID, const char* fileName, int line);
+#define stackDump(fileStream, stkID) stackDump(fileStream, stkID, __FILE__, __LINE__);
 
 #endif

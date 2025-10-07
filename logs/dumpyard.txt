@@ -1,7 +1,7 @@
 -----------------------
-[Q] Now with 800% more poison!
-stackDump #0 called from src/main.cpp:17
-Stack [0x7bbe85500040]
+[Q] None of these words are in the Bible
+stackDump #0 called from src/main.cpp:19
+Stack [0x7be65b5e0050]
 {
 	size         = 5
 	capacity     = 5
@@ -9,7 +9,7 @@ Stack [0x7bbe85500040]
 	error = 0
 	isInitialized = 1
 	isDestroyed   = 0
-	data [0x7bee867e0040]
+	data [0x7bd65b5e0040]
 	{
 		 [0] = -555880979(CANARY)
 		*[1] = 10 
@@ -22,9 +22,9 @@ Stack [0x7bbe85500040]
 }
 -----------------------
 -----------------------
-[Q] Fishy Fiesta is real
-stackDump #1 called from src/main.cpp:26
-Stack [0x7bbe85500040]
+[Q] I ATE IT ALL
+stackDump #1 called from src/main.cpp:28
+Stack [0x7be65b5e0050]
 {
 	size         = 10
 	capacity     = 10
@@ -32,7 +32,7 @@ Stack [0x7bbe85500040]
 	error = 0
 	isInitialized = 1
 	isDestroyed   = 0
-	data [0x7bfe867e0010]
+	data [0x7be65b5e0090]
 	{
 		 [0] = -555880979(CANARY)
 		*[1] = 10 
@@ -50,9 +50,9 @@ Stack [0x7bbe85500040]
 }
 -----------------------
 -----------------------
-[Q] None of these words are in the Bible
-stackDump #2 called from src/main.cpp:32
-Stack [0x7bbe85500040]
+[Q] SegFault? Not on my watch, bucko
+stackDump #2 called from src/main.cpp:34
+Stack [0x7be65b5e0050]
 {
 	size         = 13
 	capacity     = 20
@@ -60,7 +60,7 @@ Stack [0x7bbe85500040]
 	error = 0
 	isInitialized = 1
 	isDestroyed   = 0
-	data [0x7c3e867e0020]
+	data [0x7c265b5e0020]
 	{
 		 [0] = -555880979(CANARY)
 		*[1] = 10 
@@ -88,9 +88,9 @@ Stack [0x7bbe85500040]
 }
 -----------------------
 -----------------------
-[Q] None of these words are in the Bible
-stackDump #3 called from src/main.cpp:40
-Stack [0x7bbe85500040]
+[Q] stackDump soboleznuet
+stackDump #3 called from src/main.cpp:42
+Stack [0x7be65b5e0050]
 {
 	size         = 12
 	capacity     = 20
@@ -98,7 +98,7 @@ Stack [0x7bbe85500040]
 	error = 0
 	isInitialized = 1
 	isDestroyed   = 0
-	data [0x7c3e867e0020]
+	data [0x7c265b5e0020]
 	{
 		 [0] = -555880979(CANARY)
 		*[1] = 10 
@@ -126,9 +126,9 @@ Stack [0x7bbe85500040]
 }
 -----------------------
 -----------------------
-[Q] Appledog
-stackDump #4 called from src/main.cpp:43
-Stack [0x7bbe85500040]
+[Q] So what are you gonna say at my funeral now that you've killed me
+stackDump #4 called from src/main.cpp:45
+Stack [0x7be65b5e0050]
 {
 	size         = 11
 	capacity     = 20
@@ -136,7 +136,7 @@ Stack [0x7bbe85500040]
 	error = 0
 	isInitialized = 1
 	isDestroyed   = 0
-	data [0x7c3e867e0020]
+	data [0x7c265b5e0020]
 	{
 		 [0] = -555880979(CANARY)
 		*[1] = 10 
@@ -164,9 +164,9 @@ Stack [0x7bbe85500040]
 }
 -----------------------
 -----------------------
-[Q] SegFault? Not on my watch, bucko
-stackDump #5 called from src/main.cpp:49
-Stack [0x7bbe85500040]
+[Q] Ouch! That hurt!
+stackDump #5 called from src/main.cpp:51
+Stack [0x7be65b5e0050]
 {
 	size         = 11
 	capacity     = 20
@@ -174,7 +174,7 @@ Stack [0x7bbe85500040]
 	error = 0
 	isInitialized = 1
 	isDestroyed   = 0
-	data [0x7c3e867e0020]
+	data [0x7c265b5e0020]
 	{
 		 [0] = -555880979(CANARY)
 		*[1] = 10 
@@ -202,30 +202,30 @@ Stack [0x7bbe85500040]
 }
 -----------------------
 -----------------------
-[Q] Now with 800% more poison!
-stackDump #6 called from src/main.cpp:54
-Stack [0x7bbe85500040]
+[Q] Aaaaand what has went wrong now?
+stackDump #6 called from src/main.cpp:56
+Stack [0x7be65b5e0050]
 {
-	size         = 0
+	size         = 11
 	capacity     = 20
 	trueCapacity = 22
-	[!] error = -106
+	error = 0
 	isInitialized = 1
 	isDestroyed   = 0
-	data [0x7c3e867e0020]
+	data [0x7c265b5e0020]
 	{
-		![0] = 100(CORRUPTED CANARY)
-		 [1] = 101 
-		 [2] = 5 
-		 [3] = -4 
-		 [4] = 5 
-		 [5] = -4 
-		 [6] = 6 
-		 [7] = 9 
-		 [8] = 8 
-		 [9] = 8 
-		 [10] = 8 
-		 [11] = 8 
+		 [0] = -555880979(CANARY)
+		*[1] = 10 
+		*[2] = 5 
+		*[3] = -4 
+		*[4] = 5 
+		*[5] = -4 
+		*[6] = 6 
+		*[7] = 9 
+		*[8] = 8 
+		*[9] = 8 
+		*[10] = 8 
+		*[11] = 8 
 		 [12] = 0 
 		 [13] = 0 
 		 [14] = 0 
@@ -240,28 +240,19 @@ Stack [0x7bbe85500040]
 }
 -----------------------
 -----------------------
-[Q] Now with 800% more poison!
-stackDump #7 called from src/main.cpp:58
-Stack [0x7bbe85500040]
-{
-	size         = 0
-	capacity     = 0
-	trueCapacity = 22
-	[!] error = -102
-	isInitialized = 0
-	isDestroyed   = 1
-	data [NULL] {}
-}
------------------------
------------------------
-[Q] Sunshine Banishes The Dark!
-stackDump #8 called from src/main.cpp:60
+[Q] Boy oh boy I sure hope nothing bad has happened to my stack!
+stackDump #7 called from src/main.cpp:60
 Stack [NULL] {}
 -----------------------
 -----------------------
-[Q] Appledog
-stackDump #9 called from src/main.cpp:68
-Stack [0x7bbe85500090]
+[Q] Fishy Fiesta is real
+stackDump #8 called from src/main.cpp:62
+Stack [NULL] {}
+-----------------------
+-----------------------
+[Q] None of these words are in the Bible
+stackDump #9 called from src/main.cpp:72
+Stack [0x7be65b5e0110]
 {
 	size         = 3
 	capacity     = 5
@@ -269,7 +260,7 @@ Stack [0x7bbe85500090]
 	error = 0
 	isInitialized = 1
 	isDestroyed   = 0
-	data [0x7bee867e0070]
+	data [0x7bd65b5e0070]
 	{
 		 [0] = -555880979(CANARY)
 		*[1] = 10 
