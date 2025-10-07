@@ -1,17 +1,16 @@
 #include <stdio.h>
 
-//#define STACK_POISON -1
 #include "stack/stack.h"
 
 int main() {
-
-    //perrors ?
 
     FILE* dumpyard = fopen("logs/dumpyard.txt", "w");
 
     Stack stk = {};
     printf("Error code: %d\n", stackInit(&stk, 5));
     printf("Error code: %d\n", stackPush(&stk, 10));
+    printf("Error code: %d\n", stackPush(&stk, 5));
+    printf("Error code: %d\n", stackPush(&stk, -4));
     printf("Error code: %d\n", stackPush(&stk, 5));
     printf("Error code: %d\n", stackPush(&stk, -4));
 
@@ -55,7 +54,7 @@ int main() {
     stackDump(dumpyard, &stk);
 
     Stack* stkPtr = &stk;
-    stackDestroy(&stk); //excessive, but the sanitizer does not think so
+    stackDestroy(&stk);
     stackDump(dumpyard, stkPtr);
 
     stackDump(dumpyard, NULL);
@@ -65,7 +64,6 @@ int main() {
     printf("Error code: %d\n", stackPush(&stk2, 10));
     printf("Error code: %d\n", stackPush(&stk2, 5));
     printf("Error code: %d\n", stackPush(&stk2, -4));
-    printf("Error code: %d\n", stackPush(&stk2, STACK_POISON));
 
     stackDump(dumpyard, &stk2);
     stackDestroy(&stk2);

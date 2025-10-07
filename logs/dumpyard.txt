@@ -1,280 +1,283 @@
 -----------------------
-[Q] Canary Canary Do Thy Hear Me ?
-stackDump #0 called from src/main.cpp:18
-Stack [0x7bbce5100060]
+[Q] Now with 800% more poison!
+stackDump #0 called from src/main.cpp:17
+Stack [0x7bbe85500040]
 {
-	size     = 3
-	capacity = 5
+	size         = 5
+	capacity     = 5
+	trueCapacity = 7
 	error = 0
 	isInitialized = 1
 	isDestroyed   = 0
-	data [0x7bece63e0040]
+	data [0x7bee867e0040]
 	{
-		*[0] = 10
-		*[1] = 5
-		*[2] = -4
-		 [3] = 0
-		 [4] = 0
+		 [0] = -555880979(CANARY)
+		*[1] = 10 
+		*[2] = 5 
+		*[3] = -4 
+		*[4] = 5 
+		*[5] = -4 
+		 [6] = -1427263782(CANARY)
 	}
 }
 -----------------------
 -----------------------
-[Q] Is my stack gonna make it? Prolly not
-stackDump #1 called from src/main.cpp:27
-Stack [0x7bbce5100060]
+[Q] Fishy Fiesta is real
+stackDump #1 called from src/main.cpp:26
+Stack [0x7bbe85500040]
 {
-	size     = 8
-	capacity = 10
+	size         = 10
+	capacity     = 10
+	trueCapacity = 12
 	error = 0
 	isInitialized = 1
 	isDestroyed   = 0
-	data [0x7bfce63e0010]
+	data [0x7bfe867e0010]
 	{
-		*[0] = 10
-		*[1] = 5
-		*[2] = -4
-		*[3] = 6
-		*[4] = 9
-		*[5] = 8
-		*[6] = 8
-		*[7] = 8
-		 [8] = 0
-		 [9] = 0
+		 [0] = -555880979(CANARY)
+		*[1] = 10 
+		*[2] = 5 
+		*[3] = -4 
+		*[4] = 5 
+		*[5] = -4 
+		*[6] = 6 
+		*[7] = 9 
+		*[8] = 8 
+		*[9] = 8 
+		*[10] = 8 
+		 [11] = -1427263782(CANARY)
 	}
 }
 -----------------------
 -----------------------
-[Q] stackDump soboleznuet
-stackDump #2 called from src/main.cpp:33
-Stack [0x7bbce5100060]
+[Q] None of these words are in the Bible
+stackDump #2 called from src/main.cpp:32
+Stack [0x7bbe85500040]
 {
-	size     = 11
-	capacity = 20
+	size         = 13
+	capacity     = 20
+	trueCapacity = 22
 	error = 0
 	isInitialized = 1
 	isDestroyed   = 0
-	data [0x7c2ce63e0090]
+	data [0x7c3e867e0020]
 	{
-		*[0] = 10
-		*[1] = 5
-		*[2] = -4
-		*[3] = 6
-		*[4] = 9
-		*[5] = 8
-		*[6] = 8
-		*[7] = 8
-		*[8] = 8
-		*[9] = 8
-		*[10] = 8
-		 [11] = 0
-		 [12] = 0
-		 [13] = 0
-		 [14] = 0
-		 [15] = 0
-		 [16] = 0
-		 [17] = 0
-		 [18] = 0
-		 [19] = 0
+		 [0] = -555880979(CANARY)
+		*[1] = 10 
+		*[2] = 5 
+		*[3] = -4 
+		*[4] = 5 
+		*[5] = -4 
+		*[6] = 6 
+		*[7] = 9 
+		*[8] = 8 
+		*[9] = 8 
+		*[10] = 8 
+		*[11] = 8 
+		*[12] = 8 
+		*[13] = 8 
+		 [14] = 0 
+		 [15] = 0 
+		 [16] = 0 
+		 [17] = 0 
+		 [18] = 0 
+		 [19] = 0 
+		 [20] = 0 
+		 [21] = -1427263782(CANARY)
+	}
+}
+-----------------------
+-----------------------
+[Q] None of these words are in the Bible
+stackDump #3 called from src/main.cpp:40
+Stack [0x7bbe85500040]
+{
+	size         = 12
+	capacity     = 20
+	trueCapacity = 22
+	error = 0
+	isInitialized = 1
+	isDestroyed   = 0
+	data [0x7c3e867e0020]
+	{
+		 [0] = -555880979(CANARY)
+		*[1] = 10 
+		*[2] = 5 
+		*[3] = -4 
+		*[4] = 5 
+		*[5] = -4 
+		*[6] = 6 
+		*[7] = 9 
+		*[8] = 8 
+		*[9] = 8 
+		*[10] = 8 
+		*[11] = 8 
+		*[12] = 8 
+		 [13] = 0 
+		 [14] = 0 
+		 [15] = 0 
+		 [16] = 0 
+		 [17] = 0 
+		 [18] = 0 
+		 [19] = 0 
+		 [20] = 0 
+		 [21] = -1427263782(CANARY)
 	}
 }
 -----------------------
 -----------------------
 [Q] Appledog
-stackDump #3 called from src/main.cpp:41
-Stack [0x7bbce5100060]
+stackDump #4 called from src/main.cpp:43
+Stack [0x7bbe85500040]
 {
-	size     = 10
-	capacity = 20
+	size         = 11
+	capacity     = 20
+	trueCapacity = 22
 	error = 0
 	isInitialized = 1
 	isDestroyed   = 0
-	data [0x7c2ce63e0090]
+	data [0x7c3e867e0020]
 	{
-		*[0] = 10
-		*[1] = 5
-		*[2] = -4
-		*[3] = 6
-		*[4] = 9
-		*[5] = 8
-		*[6] = 8
-		*[7] = 8
-		*[8] = 8
-		*[9] = 8
-		 [10] = 0
-		 [11] = 0
-		 [12] = 0
-		 [13] = 0
-		 [14] = 0
-		 [15] = 0
-		 [16] = 0
-		 [17] = 0
-		 [18] = 0
-		 [19] = 0
+		 [0] = -555880979(CANARY)
+		*[1] = 10 
+		*[2] = 5 
+		*[3] = -4 
+		*[4] = 5 
+		*[5] = -4 
+		*[6] = 6 
+		*[7] = 9 
+		*[8] = 8 
+		*[9] = 8 
+		*[10] = 8 
+		*[11] = 8 
+		 [12] = 0 
+		 [13] = 0 
+		 [14] = 0 
+		 [15] = 0 
+		 [16] = 0 
+		 [17] = 0 
+		 [18] = 0 
+		 [19] = 0 
+		 [20] = 0 
+		 [21] = -1427263782(CANARY)
 	}
 }
 -----------------------
 -----------------------
-[Q] Ouch! That hurt!
-stackDump #4 called from src/main.cpp:44
-Stack [0x7bbce5100060]
+[Q] SegFault? Not on my watch, bucko
+stackDump #5 called from src/main.cpp:49
+Stack [0x7bbe85500040]
 {
-	size     = 9
-	capacity = 20
+	size         = 11
+	capacity     = 20
+	trueCapacity = 22
 	error = 0
 	isInitialized = 1
 	isDestroyed   = 0
-	data [0x7c2ce63e0090]
+	data [0x7c3e867e0020]
 	{
-		*[0] = 10
-		*[1] = 5
-		*[2] = -4
-		*[3] = 6
-		*[4] = 9
-		*[5] = 8
-		*[6] = 8
-		*[7] = 8
-		*[8] = 8
-		 [9] = 0
-		 [10] = 0
-		 [11] = 0
-		 [12] = 0
-		 [13] = 0
-		 [14] = 0
-		 [15] = 0
-		 [16] = 0
-		 [17] = 0
-		 [18] = 0
-		 [19] = 0
+		 [0] = -555880979(CANARY)
+		*[1] = 10 
+		*[2] = 5 
+		*[3] = -4 
+		*[4] = 5 
+		*[5] = -4 
+		*[6] = 6 
+		*[7] = 9 
+		*[8] = 8 
+		*[9] = 8 
+		*[10] = 8 
+		*[11] = 8 
+		 [12] = 0 
+		 [13] = 0 
+		 [14] = 0 
+		 [15] = 0 
+		 [16] = 0 
+		 [17] = 0 
+		 [18] = 0 
+		 [19] = 0 
+		 [20] = 0 
+		 [21] = -1427263782(CANARY)
 	}
 }
 -----------------------
 -----------------------
 [Q] Now with 800% more poison!
-stackDump #5 called from src/main.cpp:50
-Stack [0x7bbce5100060]
+stackDump #6 called from src/main.cpp:54
+Stack [0x7bbe85500040]
 {
-	size     = 9
-	capacity = 20
-	error = 0
+	size         = 0
+	capacity     = 20
+	trueCapacity = 22
+	[!] error = -106
 	isInitialized = 1
 	isDestroyed   = 0
-	data [0x7c2ce63e0090]
+	data [0x7c3e867e0020]
 	{
-		*[0] = 10
-		*[1] = 5
-		*[2] = -4
-		*[3] = 6
-		*[4] = 9
-		*[5] = 8
-		*[6] = 8
-		*[7] = 8
-		*[8] = 8
-		 [9] = 0
-		 [10] = 0
-		 [11] = 0
-		 [12] = 0
-		 [13] = 0
-		 [14] = 0
-		 [15] = 0
-		 [16] = 0
-		 [17] = 0
-		 [18] = 0
-		 [19] = 0
+		![0] = 100(CORRUPTED CANARY)
+		 [1] = 101 
+		 [2] = 5 
+		 [3] = -4 
+		 [4] = 5 
+		 [5] = -4 
+		 [6] = 6 
+		 [7] = 9 
+		 [8] = 8 
+		 [9] = 8 
+		 [10] = 8 
+		 [11] = 8 
+		 [12] = 0 
+		 [13] = 0 
+		 [14] = 0 
+		 [15] = 0 
+		 [16] = 0 
+		 [17] = 0 
+		 [18] = 0 
+		 [19] = 0 
+		 [20] = 0 
+		 [21] = -1427263782(CANARY)
 	}
 }
 -----------------------
 -----------------------
-[Q] None of these words are in the Bible
-stackDump #6 called from src/main.cpp:55
-Stack [0x7bbce5100060]
+[Q] Now with 800% more poison!
+stackDump #7 called from src/main.cpp:58
+Stack [0x7bbe85500040]
 {
-	size     = 0
-	capacity = 20
-	error = 0
-	isInitialized = 1
-	isDestroyed   = 0
-	data [0x7c2ce63e0090]
-	{
-		 [0] = 100
-		 [1] = 101
-		 [2] = -4
-		 [3] = 6
-		 [4] = 9
-		 [5] = 8
-		 [6] = 8
-		 [7] = 8
-		 [8] = 8
-		 [9] = 0
-		 [10] = 0
-		 [11] = 0
-		 [12] = 0
-		 [13] = 0
-		 [14] = 0
-		 [15] = 0
-		 [16] = 0
-		 [17] = 0
-		 [18] = 0
-		 [19] = 0
-	}
+	size         = 0
+	capacity     = 0
+	trueCapacity = 22
+	[!] error = -102
+	isInitialized = 0
+	isDestroyed   = 1
+	data [NULL] {}
 }
 -----------------------
 -----------------------
-[Q] None of these words are in the Bible
-stackDump #7 called from src/main.cpp:60
-Stack [0x7bbce5100060]
-{
-	size     = 0
-	capacity = 20
-	error = 0
-	isInitialized = 1
-	isDestroyed   = 0
-	data [0x7c2ce63e0090]
-	{
-		 [0] = 100
-		 [1] = 101
-		 [2] = -4
-		 [3] = 6
-		 [4] = 9
-		 [5] = 8
-		 [6] = 8
-		 [7] = 8
-		 [8] = 8
-		 [9] = 0
-		 [10] = 0
-		 [11] = 0
-		 [12] = 0
-		 [13] = 0
-		 [14] = 0
-		 [15] = 0
-		 [16] = 0
-		 [17] = 0
-		 [18] = 0
-		 [19] = 0
-	}
-}
------------------------
------------------------
-[Q] Ouch! That hurt!
-stackDump #8 called from src/main.cpp:62
+[Q] Sunshine Banishes The Dark!
+stackDump #8 called from src/main.cpp:60
 Stack [NULL] {}
 -----------------------
 -----------------------
-[Q] OUR FOOD KEEPS BLOWING U-
-stackDump #9 called from src/main.cpp:71
-Stack [0x7bbce51000a0]
+[Q] Appledog
+stackDump #9 called from src/main.cpp:68
+Stack [0x7bbe85500090]
 {
-	size     = 4
-	capacity = 5
+	size         = 3
+	capacity     = 5
+	trueCapacity = 7
 	error = 0
 	isInitialized = 1
 	isDestroyed   = 0
-	data [0x7bece63e0070]
+	data [0x7bee867e0070]
 	{
-		*[0] = 10
-		*[1] = 5
-		*[2] = -4
-		 [3] = 703750(POISON)
-		 [4] = 0
+		 [0] = -555880979(CANARY)
+		*[1] = 10 
+		*[2] = 5 
+		*[3] = -4 
+		 [4] = 0 
+		 [5] = 0 
+		 [6] = -1427263782(CANARY)
 	}
 }
 -----------------------
