@@ -3,7 +3,6 @@
 #include "stack/stack.h"
 
 int main() {
-
     FILE* dumpyard = fopen("logs/dumpyard.txt", "w");
 
     int stkID = stackInit(5);
@@ -43,19 +42,9 @@ int main() {
     printf("Current element in stack: %d\n", stackPop(stkID, &error));
     printf("Error code: %d\n", error);
     stackDump(dumpyard, stkID);
-    // printf("Current element in stack: %d\n", stackPop(&stk, &error));
-    // printf("Error code: %d\n", error);
-    // stackDump(stderr, &stk);
-    // printf("Current element in stack: %d\n", stackPop(&stk, &error));
-    // printf("Error code: %d\n", error);
+
     stackDump(dumpyard, stkID);
 
-    // stk.size = 0;
-    // stk.data[0] = 100;
-    // stk.data[1] = 101; Cant do that anymore! HAHA!
-    stackDump(dumpyard, stkID);
-
-    // Stack* stkPtr = stkID;
     stackDestroy(stkID);
     stackDump(dumpyard, stkID);
 
@@ -72,10 +61,6 @@ int main() {
     stackDump(dumpyard, stkID2);
     stackDestroy(stkID2);
 
-    //printf("Error code: %d\n", stackPush(&stk, 10));
-    //printf("Error code: %d\n", error);
-    fclose(dumpyard);
-
     int a = stackInit(3);
     int b = stackInit(3);
     int c = stackInit(3);
@@ -90,6 +75,7 @@ int main() {
     int d2 = stackInit(3);
     int d3 = stackInit(3);
     int d4 = stackInit(3);
+    stackDump(dumpyard, d4);
     printf("Stack Initialized with an ID: %d\n", d);
     printf("Stack Initialized with an ID: %d\n", d1);
     printf("Stack Initialized with an ID: %d\n", d2);
@@ -104,5 +90,6 @@ int main() {
     stackDestroy(d3);
     stackDestroy(d4);
 
+    fclose(dumpyard);
     return 0;
 }

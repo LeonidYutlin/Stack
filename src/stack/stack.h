@@ -50,7 +50,9 @@ size_t stackGetSize(int stkID, StackError* error = NULL);
 size_t stackGetCapacity(int stkID, StackError* error = NULL);
 StackError stackGetError(int stkID);
 
-void stackDump(FILE* fileStream, int stkID, const char* fileName, int line);
-#define stackDump(fileStream, stkID) stackDump(fileStream, stkID, __FILE__, __LINE__);
+void stackDump(FILE *fileStream, int stkID,
+               const char *fileName, int line);
+#define stackDump(fileStream, stkID) \
+    stackDump(fileStream, stkID, __FILE__, __LINE__);
 
 #endif

@@ -59,6 +59,11 @@ static StackError stackCheckCanaries(Stack* stk);
 static int printFormattedStackUnitString(FILE* fileStream, 
                                          Stack* stk, size_t index);
 
+static void stackDumpInternal(FILE* fileStream, int stkID, bool isAdvanced, 
+                              const char* fileName, int line);
+#define stackDumpInternal(fileStream, stkID, isAdvanced) \
+    stackDumpInternal(fileStream, stkID, isAdvanced, __FILE__, __LINE__);
+
 int stackInit(size_t initialCapacity){
 
     if (!STACK_MANAGER.data) {
@@ -128,6 +133,7 @@ int stackInit(size_t initialCapacity){
     */
 
     StackError error = stackVerify(stkID);
+    //stackDumpInternal(stdout, stkID, true);
     return error == NaE ? stkID : error;
 }
 
@@ -292,9 +298,18 @@ int printFormattedStackUnitString(FILE* fileStream, Stack* stk, size_t index) {
     return fprintf(fileStream, "\t\t%s[%lu] = %d%s\n", prefix, index, value, suffix);
 }
 
+#undef stackDumpInternal
+
 void stackDump(FILE *fileStream, int stkID,
                const char *fileName, int line) {
     assert(fileStream);
+
+    return stackDumpInternal(fileStream, stkID, false, fileName, line);
+}
+
+void stackDumpInternal(FILE *fileStream, int stkID, bool isAdvanced,
+               const char *fileName, int line) {
+    assert(fileStream); //no assert?
 
     Stack* stk = getStack(stkID);
 
@@ -318,28 +333,53 @@ void stackDump(FILE *fileStream, int stkID,
                         % (sizeof(QUOTES) / sizeof(char *))],
                 callCount++, fileName, line);
     } else {
-        fprintf(fileStream,
-                "-----------------------\n"
-                "[Q] %s\n"
-                "stackDump #%ld called from %s:%d\n"
-                "Stack [%p]\n"
-                "{\n"
-                "\tsize         = %lu\n"
-                "\tcapacity     = %lu\n"
-                "\ttrueCapacity = %lu\n"
-                "\t%serror = %d\n"
-                "\tisInitialized = %d\n"
-                "\tisDestroyed   = %d\n",
-                QUOTES[(unsigned long)random()
-                        % (sizeof(QUOTES) / sizeof(char *))],
-                callCount++, fileName, line,
-                stk,
-                stk->size,
-                stk->capacity,
-                stk->trueCapacity,
-                stk->error == NaE ? "" : "[!] ", stk->error,
-                stk->isInitialized,
-                stk->isDestroyed);
+        if (isAdvanced) {
+            fprintf(fileStream,
+                    "-----------------------\n"
+                    "[Q] %s\n"
+                   "stackDump #%ld called from %s:%d\n"
+                    "Stack (stackID = %d) [%p]\n"
+                    "{\n"
+                    "\tsize         = %lu\n"
+                    "\tcapacity     = %lu\n"
+                    "\ttrueCapacity = %lu\n"
+                    "\t%serror = %d\n"
+                    "\tisInitialized = %d\n"
+                    "\tisDestroyed   = %d\n",
+                    QUOTES[(unsigned long)random()
+                            % (sizeof(QUOTES) / sizeof(char *))],
+                    callCount++, fileName, line,
+                    stkID, stk,
+                    stk->size,
+                    stk->capacity,
+                    stk->trueCapacity,
+                    stk->error == NaE ? "" : "[!] ", stk->error,
+                    stk->isInitialized,
+                    stk->isDestroyed);
+        } else {
+            fprintf(fileStream,
+                    "-----------------------\n"
+                    "[Q] %s\n"
+                   "stackDump #%ld called from %s:%d\n"
+                    "Stack (stackID = %d)\n"
+                    "{\n"
+                    "\tsize         = %lu\n"
+                    "\tcapacity     = %lu\n"
+                    "\ttrueCapacity = %lu\n"
+                    "\t%serror = %d\n"
+                    "\tisInitialized = %d\n"
+                    "\tisDestroyed   = %d\n",
+                    QUOTES[(unsigned long)random()
+                            % (sizeof(QUOTES) / sizeof(char *))],
+                    callCount++, fileName, line,
+                    stkID,
+                    stk->size,
+                    stk->capacity,
+                    stk->trueCapacity,
+                    stk->error == NaE ? "" : "[!] ", stk->error,
+                    stk->isInitialized,
+                    stk->isDestroyed);
+        }
 
         if (stackError == NullDataPointerError || stk->data == NULL) {
             fprintf(fileStream,
@@ -347,10 +387,16 @@ void stackDump(FILE *fileStream, int stkID,
                     "}\n"
                     "-----------------------\n");
         } else {
-            fprintf(fileStream,
-                    "\tdata [%p]\n"
-                    "\t{\n",
-                    stk->data);
+            if (isAdvanced) {
+                fprintf(fileStream,
+                        "\tdata [%p]\n"
+                        "\t{\n",
+                      stk->data);
+            } else {
+                fputs("\tdata\n"
+                      "\t{\n", 
+                      fileStream);
+            }
             for (size_t i = 0; i < stk->trueCapacity; i++) 
                 printFormattedStackUnitString(fileStream, stk, i);
             fprintf(fileStream,
