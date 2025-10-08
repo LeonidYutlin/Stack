@@ -30,7 +30,7 @@ enum StackError {
     TransmutedValueError        = -204,
     DecrementationError         = -205,
     FailedPopError              = -206,
-    EmptyStackDataError         = -207
+    NothingToPopError           = -207
 };
 
 int stackInit(size_t initialCapacity);

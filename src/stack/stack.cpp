@@ -189,7 +189,7 @@ StackUnit stackPop(int stkID, StackError *error){
     size_t previousSize = stk->size;
 
     if (stk->size == 0) {
-        stk->error = EmptyStackDataError;
+        stk->error = NothingToPopError;
         if (error)
             *error = stk->error;
         return STACK_POISON;
