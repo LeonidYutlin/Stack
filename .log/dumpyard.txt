@@ -1,6 +1,6 @@
 -----------------------
-[Q] Now with 800% more poison!
-stackDump #0 called from src/test/stackTest.cpp:18
+[Q] I ATE IT ALL
+stackDump #0 called from spu/src/test/stackTest.cpp:23
 Stack (stackID = 0)
 {
 	size         = 5
@@ -22,8 +22,8 @@ Stack (stackID = 0)
 }
 -----------------------
 -----------------------
-[Q] OUR FOOD KEEPS BLOWING U-
-stackDump #1 called from src/test/stackTest.cpp:27
+[Q] Aaaaand what has went wrong now?
+stackDump #1 called from spu/src/test/stackTest.cpp:32
 Stack (stackID = 0)
 {
 	size         = 10
@@ -50,8 +50,8 @@ Stack (stackID = 0)
 }
 -----------------------
 -----------------------
-[Q] Now with 800% more poison!
-stackDump #2 called from src/test/stackTest.cpp:33
+[Q] I ATE IT ALL
+stackDump #2 called from spu/src/test/stackTest.cpp:38
 Stack (stackID = 0)
 {
 	size         = 13
@@ -88,8 +88,8 @@ Stack (stackID = 0)
 }
 -----------------------
 -----------------------
-[Q] Ouch! That hurt!
-stackDump #3 called from src/test/stackTest.cpp:41
+[Q] None of these words are in the Bible
+stackDump #3 called from spu/src/test/stackTest.cpp:46
 Stack (stackID = 0)
 {
 	size         = 12
@@ -126,8 +126,8 @@ Stack (stackID = 0)
 }
 -----------------------
 -----------------------
-[Q] stackDump soboleznuet
-stackDump #4 called from src/test/stackTest.cpp:44
+[Q] I ATE IT ALL
+stackDump #4 called from spu/src/test/stackTest.cpp:49
 Stack (stackID = 0)
 {
 	size         = 11
@@ -165,7 +165,7 @@ Stack (stackID = 0)
 -----------------------
 -----------------------
 [Q] Now with 800% more poison!
-stackDump #5 called from src/test/stackTest.cpp:46
+stackDump #5 called from spu/src/test/stackTest.cpp:51
 Stack (stackID = 0)
 {
 	size         = 11
@@ -202,18 +202,18 @@ Stack (stackID = 0)
 }
 -----------------------
 -----------------------
-[Q] So what are you gonna say at my funeral now that you've killed me
-stackDump #6 called from src/test/stackTest.cpp:49
+[Q] Sunshine Banishes The Dark!
+stackDump #6 called from spu/src/test/stackTest.cpp:54
 Stack [NULL] {}
 -----------------------
 -----------------------
-[Q] So what are you gonna say at my funeral now that you've killed me
-stackDump #7 called from src/test/stackTest.cpp:51
+[Q] stackDump soboleznuet
+stackDump #7 called from spu/src/test/stackTest.cpp:56
 Stack [NULL] {}
 -----------------------
 -----------------------
-[Q] Ouch! That hurt!
-stackDump #8 called from src/test/stackTest.cpp:61
+[Q] Et tu, Brute?
+stackDump #8 called from spu/src/test/stackTest.cpp:66
 Stack (stackID = 0)
 {
 	size         = 3
@@ -235,8 +235,8 @@ Stack (stackID = 0)
 }
 -----------------------
 -----------------------
-[Q] I ATE IT ALL
-stackDump #9 called from src/test/stackTest.cpp:78
+[Q] SegFault? Not on my watch, bucko
+stackDump #9 called from spu/src/test/stackTest.cpp:83
 Stack (stackID = 6)
 {
 	size         = 0

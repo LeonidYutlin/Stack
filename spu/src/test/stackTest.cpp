@@ -3,7 +3,12 @@
 #include "stack/stack.h"
 
 int main() {
-    FILE* dumpyard = fopen("log/dumpyard.txt", "w");
+    FILE* dumpyard = fopen("../.log/dumpyard.txt", "w");
+
+    if (dumpyard == NULL) {
+        puts("Error opening file!");
+        return -1;
+    }
 
     int stkID = stackInit(5);
     if (stkID < 0) {
