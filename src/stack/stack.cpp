@@ -40,7 +40,7 @@ typedef struct Stack {
     size_t size = 0;
     size_t capacity = 0;
     size_t trueCapacity = 0;
-    StackError error = UninitializedStackError;
+    StackError error = InvalidStackID;
     bool isDestroyed = false;
     bool isInitialized = false;
     //char state = '\0' 'd' 'i' 'e'
@@ -65,6 +65,8 @@ static void stackDumpInternal(FILE* fileStream, int stkID, bool isAdvanced,
     stackDumpInternal(fileStream, stkID, isAdvanced, __FILE__, __LINE__);
 
 int stackInit(size_t initialCapacity){
+    if (initialCapacity == 0) 
+        return InvalidInitialCapacityError;
 
     if (!STACK_MANAGER.data) {
         Stack** tempPtr = (Stack**)calloc(INITIAL_STACK_MANAGER_CAPACITY, 
@@ -219,11 +221,6 @@ StackError stackDestroy(int stkID){
     if (!stk)
         return InvalidStackID;
 
-    //simpler check.. just a simpler check
-    // if (stackVerify(stkID) == NullStackPointerError)
-    if (!stk)
-        return NullStackPointerError;
-
     if (*stk->data) {
         for (size_t i = 0; i < stk->trueCapacity; i++)
             stk->data[i] = STACK_POISON;
@@ -233,7 +230,7 @@ StackError stackDestroy(int stkID){
 
     stk->size = 0;
     stk->capacity = 0;
-    stk->error = DestroyedStackError;
+    stk->error = InvalidStackID;
     stk->isInitialized = false;
     stk->isDestroyed = true;
 
@@ -251,10 +248,6 @@ StackError stackVerify(int stkID){
     Stack* stk = getStack(stkID);
     if (!stk)
         return InvalidStackID;
-    if (stk->isDestroyed)
-        return stk->error = DestroyedStackError;
-    if (!stk->isInitialized)
-        return stk->error = UninitializedStackError;
     if (!stk->data)
         return stk->error = NullDataPointerError;
     if (stk->capacity == 0)
@@ -322,7 +315,7 @@ void stackDumpInternal(FILE *fileStream, int stkID, bool isAdvanced,
     }
 
     StackError stackError = stackVerify(stkID);
-    if (stackError == NullStackPointerError || stk == NULL) {
+    if (stk == NULL) {
         fprintf(fileStream,
                 "-----------------------\n"
                 "[Q] %s\n"
@@ -432,7 +425,7 @@ size_t stackGetCapacity(int stkID, StackError* error) {
 StackError stackGetError(int stkID) {
     Stack* stk = getStack(stkID);
     if (!stk)
-        return InvalidCapacityError;
+        return InvalidStackID;
 
     return stk->error;
 }

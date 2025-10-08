@@ -12,32 +12,25 @@
 typedef int StackUnit;
 
 /*
-    0 is okay
-    -1xx is genericError
-    -2xx is initSpecificError
-    -3xx is pushSpecificError
-    -9xx is otherError
+       0 is okay
+    -1xx is genericStackError
+    -2xx is genericFunctionExecutionError
 */
 enum StackError {
     NaE                         =    0, //NotAnError
-    NullStackPointerError       = -100,
+    InvalidStackID              = -100,
     NullDataPointerError        = -101,
-    DestroyedStackError         = -102,
-    UninitializedStackError     = -103,
-    InvalidCapacityError        = -104,
-    SizeOutOfBoundsError        = -105,
-    CorruptedCanaryError        = -106,
-    InvalidStackID              = -107,
-    ReinitializationError       = -200,
-    MemoryAllocationError       = -201,
-    MemoryReallocationError     = -202,
-    InvalidInitialCapacityError = -203,
-    IncrementationError         = -300,
-    TransmutedValueError        = -301,
-    DecrementationError         = -400,
-    FailedPopError              = -401,
-    EmptyStackDataError         = -402,
-    UnidentifiedStackError      = -900
+    InvalidCapacityError        = -102,
+    SizeOutOfBoundsError        = -103,
+    CorruptedCanaryError        = -104,
+    MemoryAllocationError       = -200,
+    MemoryReallocationError     = -201,
+    InvalidInitialCapacityError = -202,
+    IncrementationError         = -203,
+    TransmutedValueError        = -204,
+    DecrementationError         = -205,
+    FailedPopError              = -206,
+    EmptyStackDataError         = -207
 };
 
 int stackInit(size_t initialCapacity);
