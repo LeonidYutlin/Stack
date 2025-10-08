@@ -1,6 +1,6 @@
 -----------------------
-[Q] Is my stack gonna make it? Prolly not
-stackDump #1 called from src/main.cpp:19
+[Q] Now with 800% more poison!
+stackDump #0 called from src/test/stackTest.cpp:18
 Stack (stackID = 0)
 {
 	size         = 5
@@ -22,8 +22,8 @@ Stack (stackID = 0)
 }
 -----------------------
 -----------------------
-[Q] Aaaaand what has went wrong now?
-stackDump #2 called from src/main.cpp:28
+[Q] OUR FOOD KEEPS BLOWING U-
+stackDump #1 called from src/test/stackTest.cpp:27
 Stack (stackID = 0)
 {
 	size         = 10
@@ -50,8 +50,8 @@ Stack (stackID = 0)
 }
 -----------------------
 -----------------------
-[Q] Canary Canary Do Thy Hear Me ?
-stackDump #3 called from src/main.cpp:34
+[Q] Now with 800% more poison!
+stackDump #2 called from src/test/stackTest.cpp:33
 Stack (stackID = 0)
 {
 	size         = 13
@@ -88,8 +88,8 @@ Stack (stackID = 0)
 }
 -----------------------
 -----------------------
-[Q] Canary Canary Do Thy Hear Me ?
-stackDump #4 called from src/main.cpp:42
+[Q] Ouch! That hurt!
+stackDump #3 called from src/test/stackTest.cpp:41
 Stack (stackID = 0)
 {
 	size         = 12
@@ -126,8 +126,46 @@ Stack (stackID = 0)
 }
 -----------------------
 -----------------------
-[Q] Et tu, Brute?
-stackDump #5 called from src/main.cpp:45
+[Q] stackDump soboleznuet
+stackDump #4 called from src/test/stackTest.cpp:44
+Stack (stackID = 0)
+{
+	size         = 11
+	capacity     = 20
+	trueCapacity = 22
+	error = 0
+	isInitialized = 1
+	isDestroyed   = 0
+	data
+	{
+		 [0] = -555880979(CANARY)
+		*[1] = 10 
+		*[2] = 5 
+		*[3] = -4 
+		*[4] = 5 
+		*[5] = -4 
+		*[6] = 6 
+		*[7] = 9 
+		*[8] = 8 
+		*[9] = 8 
+		*[10] = 8 
+		*[11] = 8 
+		 [12] = 0 
+		 [13] = 0 
+		 [14] = 0 
+		 [15] = 0 
+		 [16] = 0 
+		 [17] = 0 
+		 [18] = 0 
+		 [19] = 0 
+		 [20] = 0 
+		 [21] = -1427263782(CANARY)
+	}
+}
+-----------------------
+-----------------------
+[Q] Now with 800% more poison!
+stackDump #5 called from src/test/stackTest.cpp:46
 Stack (stackID = 0)
 {
 	size         = 11
@@ -165,93 +203,17 @@ Stack (stackID = 0)
 -----------------------
 -----------------------
 [Q] So what are you gonna say at my funeral now that you've killed me
-stackDump #6 called from src/main.cpp:51
-Stack (stackID = 0)
-{
-	size         = 11
-	capacity     = 20
-	trueCapacity = 22
-	error = 0
-	isInitialized = 1
-	isDestroyed   = 0
-	data
-	{
-		 [0] = -555880979(CANARY)
-		*[1] = 10 
-		*[2] = 5 
-		*[3] = -4 
-		*[4] = 5 
-		*[5] = -4 
-		*[6] = 6 
-		*[7] = 9 
-		*[8] = 8 
-		*[9] = 8 
-		*[10] = 8 
-		*[11] = 8 
-		 [12] = 0 
-		 [13] = 0 
-		 [14] = 0 
-		 [15] = 0 
-		 [16] = 0 
-		 [17] = 0 
-		 [18] = 0 
-		 [19] = 0 
-		 [20] = 0 
-		 [21] = -1427263782(CANARY)
-	}
-}
------------------------
------------------------
-[Q] Tut mogla bit' vasha oshibka
-stackDump #7 called from src/main.cpp:56
-Stack (stackID = 0)
-{
-	size         = 11
-	capacity     = 20
-	trueCapacity = 22
-	error = 0
-	isInitialized = 1
-	isDestroyed   = 0
-	data
-	{
-		 [0] = -555880979(CANARY)
-		*[1] = 10 
-		*[2] = 5 
-		*[3] = -4 
-		*[4] = 5 
-		*[5] = -4 
-		*[6] = 6 
-		*[7] = 9 
-		*[8] = 8 
-		*[9] = 8 
-		*[10] = 8 
-		*[11] = 8 
-		 [12] = 0 
-		 [13] = 0 
-		 [14] = 0 
-		 [15] = 0 
-		 [16] = 0 
-		 [17] = 0 
-		 [18] = 0 
-		 [19] = 0 
-		 [20] = 0 
-		 [21] = -1427263782(CANARY)
-	}
-}
------------------------
------------------------
-[Q] Now with 800% more poison!
-stackDump #8 called from src/main.cpp:60
+stackDump #6 called from src/test/stackTest.cpp:49
 Stack [NULL] {}
 -----------------------
 -----------------------
-[Q] Now with 800% more poison!
-stackDump #9 called from src/main.cpp:62
+[Q] So what are you gonna say at my funeral now that you've killed me
+stackDump #7 called from src/test/stackTest.cpp:51
 Stack [NULL] {}
 -----------------------
 -----------------------
-[Q] Aaaaand what has went wrong now?
-stackDump #11 called from src/main.cpp:72
+[Q] Ouch! That hurt!
+stackDump #8 called from src/test/stackTest.cpp:61
 Stack (stackID = 0)
 {
 	size         = 3
@@ -273,8 +235,8 @@ Stack (stackID = 0)
 }
 -----------------------
 -----------------------
-[Q] stackDump soboleznuet
-stackDump #20 called from src/main.cpp:92
+[Q] I ATE IT ALL
+stackDump #9 called from src/test/stackTest.cpp:78
 Stack (stackID = 6)
 {
 	size         = 0
