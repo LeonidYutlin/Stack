@@ -1,16 +1,20 @@
+#include <assert.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <time.h>
+
 #include "stack.h"
+
 #undef stackDump
 
-#ifndef STACK_POISON
-#define STACK_POISON 0xAbD06
-#endif
+static const StackUnit STACK_POISON = 0xAbD06;
 
-#ifndef CANARY_LEFT
-#define CANARY_LEFT (StackUnit)0xDEDDEDED
-#endif
-#ifndef CANARY_RIGHT
-#define CANARY_RIGHT (StackUnit)0xAAEDAEDA
-#endif
+static const StackUnit CANARY_LEFT = 0xDEDDEDED;
+static const StackUnit CANARY_RIGHT = 0xAAEDAEDA;
+
 static const size_t CANARY_LEFT_COUNT = 1;
 static const size_t CANARY_RIGHT_COUNT = 1;
 
@@ -39,11 +43,10 @@ typedef struct Stack {
     StackUnit* data = NULL;
     size_t size = 0;
     size_t capacity = 0;
-    size_t trueCapacity = 0;
+    size_t capacityWithCanaries = 0;
     StackError error = InvalidStackID;
     bool isDestroyed = false;
     bool isInitialized = false;
-    //char state = '\0' 'd' 'i' 'e'
 } Stack;
 
 static const size_t INITIAL_STACK_MANAGER_CAPACITY = 5;
@@ -73,6 +76,7 @@ int stackInit(size_t initialCapacity){
                                           sizeof(Stack*));
         if (!tempPtr)
             return MemoryAllocationError;
+
         STACK_MANAGER.capacity = INITIAL_STACK_MANAGER_CAPACITY;
         STACK_MANAGER.size = 0;
         STACK_MANAGER.data = tempPtr;
@@ -82,6 +86,7 @@ int stackInit(size_t initialCapacity){
                                            * sizeof(Stack*));
         if (!tempPtr)
             return MemoryReallocationError;
+            
         STACK_MANAGER.capacity *= 2;
         STACK_MANAGER.data = tempPtr;
     }
@@ -101,23 +106,23 @@ int stackInit(size_t initialCapacity){
     STACK_MANAGER.data[stkID] = stk;
     STACK_MANAGER.size++;
 
-    size_t trueCapacity = initialCapacity + (size_t)CANARY_LEFT_COUNT 
+    size_t capacityWithCanaries = initialCapacity + (size_t)CANARY_LEFT_COUNT 
                           + (size_t)CANARY_RIGHT_COUNT;
-    StackUnit* tempPtr = (StackUnit*)calloc(trueCapacity, sizeof(StackUnit));
+    StackUnit* tempPtr = (StackUnit*)calloc(capacityWithCanaries, sizeof(StackUnit));
     if (!tempPtr)
         return stk->error = MemoryAllocationError;
 
     stk->data = tempPtr;
     stk->size = 0;
     stk->capacity = initialCapacity;
-    stk->trueCapacity = trueCapacity;
+    stk->capacityWithCanaries = capacityWithCanaries;
     stk->error = NaE;
     stk->isDestroyed = false;
     stk->isInitialized = true;
     for (size_t i = 0; i < (size_t)CANARY_LEFT_COUNT; i++)
         stk->data[i] = CANARY_LEFT;
     for (size_t i = 0; i < (size_t)CANARY_RIGHT_COUNT; i++)
-        stk->data[stk->trueCapacity - 1 - i] = CANARY_RIGHT;
+        stk->data[stk->capacityWithCanaries - 1 - i] = CANARY_RIGHT;
 
     /*
     A way of doing all this via cpp's default struct values
@@ -151,17 +156,17 @@ StackError stackPush(int stkID, StackUnit value){
     size_t previousSize = stk->size;
     if (previousSize == stk->capacity) {
         StackUnit *tempPtr = (StackUnit*)realloc(stk->data,
-                                                 (stk->trueCapacity + stk->capacity)
+                                                 (stk->capacityWithCanaries + stk->capacity)
                                                  * sizeof(StackUnit));
         if (!tempPtr)
             return stk->error = MemoryReallocationError;
         memset(tempPtr + (size_t)CANARY_LEFT_COUNT + previousSize, 0, 
                (stk->capacity + (size_t)CANARY_RIGHT_COUNT) * sizeof(StackUnit));
-        stk->trueCapacity += stk->capacity;
+        stk->capacityWithCanaries += stk->capacity;
         stk->capacity *= 2;
         stk->data = tempPtr;
         for (size_t i = 0; i < (size_t)CANARY_RIGHT_COUNT; i++)
-            stk->data[stk->trueCapacity - 1 - i] = CANARY_RIGHT;
+            stk->data[stk->capacityWithCanaries - 1 - i] = CANARY_RIGHT;
     }
 
     stk->data[(size_t)CANARY_LEFT_COUNT + stk->size++] = value;
@@ -222,7 +227,7 @@ StackError stackDestroy(int stkID){
         return InvalidStackID;
 
     if (*stk->data) {
-        for (size_t i = 0; i < stk->trueCapacity; i++)
+        for (size_t i = 0; i < stk->capacityWithCanaries; i++)
             stk->data[i] = STACK_POISON;
         free(stk->data);
         stk->data = NULL;
@@ -262,7 +267,7 @@ StackError stackCheckCanaries(Stack* stk) {
         if (stk->data[i] != CANARY_LEFT) 
             return CorruptedCanaryError;
     for (size_t i = 0; i < CANARY_RIGHT_COUNT; i++)
-        if (stk->data[stk->trueCapacity - 1 - i] != CANARY_RIGHT) 
+        if (stk->data[stk->capacityWithCanaries - 1 - i] != CANARY_RIGHT) 
             return CorruptedCanaryError;
     return NaE;
 }
@@ -282,7 +287,7 @@ int printFormattedStackUnitString(FILE* fileStream, Stack* stk, size_t index) {
         bool isCorrupted = (value != CANARY_LEFT);
         prefix = isCorrupted ? "!" : " ";
         suffix = isCorrupted ? "(CORRUPTED CANARY)" : "(CANARY)";
-    } else if ((stk->trueCapacity - 1 - index) < CANARY_RIGHT_COUNT) {
+    } else if ((stk->capacityWithCanaries - 1 - index) < CANARY_RIGHT_COUNT) {
         bool isCorrupted = (value != CANARY_RIGHT);
         prefix = isCorrupted ? "!" : " ";
         suffix = isCorrupted ? "(CORRUPTED CANARY)" : "(CANARY)";
@@ -335,7 +340,7 @@ void stackDumpInternal(FILE *fileStream, int stkID, bool isAdvanced,
                     "{\n"
                     "\tsize         = %lu\n"
                     "\tcapacity     = %lu\n"
-                    "\ttrueCapacity = %lu\n"
+                    "\tcapacityWithCanaries = %lu\n"
                     "\t%serror = %d\n"
                     "\tisInitialized = %d\n"
                     "\tisDestroyed   = %d\n",
@@ -345,7 +350,7 @@ void stackDumpInternal(FILE *fileStream, int stkID, bool isAdvanced,
                     stkID, stk,
                     stk->size,
                     stk->capacity,
-                    stk->trueCapacity,
+                    stk->capacityWithCanaries,
                     stk->error == NaE ? "" : "[!] ", stk->error,
                     stk->isInitialized,
                     stk->isDestroyed);
@@ -358,7 +363,7 @@ void stackDumpInternal(FILE *fileStream, int stkID, bool isAdvanced,
                     "{\n"
                     "\tsize         = %lu\n"
                     "\tcapacity     = %lu\n"
-                    "\ttrueCapacity = %lu\n"
+                    "\tcapacityWithCanaries = %lu\n"
                     "\t%serror = %d\n"
                     "\tisInitialized = %d\n"
                     "\tisDestroyed   = %d\n",
@@ -368,7 +373,7 @@ void stackDumpInternal(FILE *fileStream, int stkID, bool isAdvanced,
                     stkID,
                     stk->size,
                     stk->capacity,
-                    stk->trueCapacity,
+                    stk->capacityWithCanaries,
                     stk->error == NaE ? "" : "[!] ", stk->error,
                     stk->isInitialized,
                     stk->isDestroyed);
@@ -390,7 +395,7 @@ void stackDumpInternal(FILE *fileStream, int stkID, bool isAdvanced,
                       "\t{\n", 
                       fileStream);
             }
-            for (size_t i = 0; i < stk->trueCapacity; i++) 
+            for (size_t i = 0; i < stk->capacityWithCanaries; i++) 
                 printFormattedStackUnitString(fileStream, stk, i);
             fprintf(fileStream,
                     "\t}\n"
