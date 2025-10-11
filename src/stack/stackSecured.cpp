@@ -44,7 +44,7 @@ typedef struct Stack {
     size_t size = 0;
     size_t capacity = 0;
     size_t capacityWithCanaries = 0;
-    StackError status = InvalidStackID;
+    StackStatus status = InvalidStackID;
     bool isDestroyed = false;
     bool isInitialized = false;
 } Stack;
@@ -58,7 +58,7 @@ typedef struct StackManager {
 static StackManager STACK_MANAGER = {0};
 
 static Stack* getStack(int stkID);
-static StackError stackCheckCanaries(Stack* stk);
+static StackStatus stackCheckCanaries(Stack* stk);
 static int printFormattedStackUnitString(FILE* fileStream, 
                                          Stack* stk, size_t index);
 
@@ -142,25 +142,25 @@ int stackInit(size_t initialCapacity){
     */
 
     /*
-    if (!(stackError = stackVerify(stkID)))
-        return stackError;
+    if (!(stackStatus = stackVerify(stkID)))
+        return stackStatus;
 
-    return stackError;
+    return stackStatus;
     */
 
-    StackError status = stackVerify(stkID);
+    StackStatus status = stackVerify(stkID);
     //stackDumpInternal(stdout, stkID, true);
     return status == NaE ? stkID : status;
 }
 
-StackError stackPush(int stkID, StackUnit value){
+StackStatus stackPush(int stkID, StackUnit value){
     Stack* stk = getStack(stkID);
     if (!stk)
         return InvalidStackID;
 
-    StackError stackError = NaE;
-    if ((stackError = stackVerify(stkID)))
-        return stackError;
+    StackStatus stackStatus = NaE;
+    if ((stackStatus = stackVerify(stkID)))
+        return stackStatus;
 
     size_t previousSize = stk->size;
     if (previousSize == stk->capacity) {
@@ -188,13 +188,13 @@ StackError stackPush(int stkID, StackUnit value){
     return stackVerify(stkID);
 }
 
-StackUnit stackPop(int stkID, StackError *status){
+StackUnit stackPop(int stkID, StackStatus *status){
     Stack* stk = getStack(stkID);
     if (!stk)
         return InvalidStackID;
 
-    StackError stackError = NaE;
-    if ((stackError = stackVerify(stkID))) {
+    StackStatus stackStatus = NaE;
+    if ((stackStatus = stackVerify(stkID))) {
         if (status)
             *status = stk->status;
         return STACK_POISON;
@@ -230,7 +230,7 @@ StackUnit stackPop(int stkID, StackError *status){
     return value;
 }
 
-StackError stackDestroy(int stkID){
+StackStatus stackDestroy(int stkID){
     Stack* stk = getStack(stkID);
     if (!stk)
         return InvalidStackID;
@@ -258,7 +258,7 @@ StackError stackDestroy(int stkID){
     return NaE;
 }
 
-StackError stackVerify(int stkID){
+StackStatus stackVerify(int stkID){
     Stack* stk = getStack(stkID);
     if (!stk)
         return InvalidStackID;
@@ -271,7 +271,7 @@ StackError stackVerify(int stkID){
     return stk->status = stackCheckCanaries(stk);
 }
 
-StackError stackCheckCanaries(Stack* stk) {
+StackStatus stackCheckCanaries(Stack* stk) {
     for (size_t i = 0; i < CANARY_LEFT_COUNT; i++)
         if (stk->data[i] != CANARY_LEFT) 
             return CorruptedCanaryError;
@@ -328,7 +328,7 @@ void stackDumpInternal(FILE *fileStream, int stkID, bool isAdvanced,
         isRandomInitialized = true;
     }
 
-    StackError stackError = stackVerify(stkID);
+    StackStatus stackStatus = stackVerify(stkID);
     if (stk == NULL) {
         fprintf(fileStream,
                 "-----------------------\n"
@@ -388,7 +388,7 @@ void stackDumpInternal(FILE *fileStream, int stkID, bool isAdvanced,
                     stk->isDestroyed);
         }
 
-        if (stackError == NullDataPointerError || stk->data == NULL) {
+        if (stackStatus == NullDataPointerError || stk->data == NULL) {
             fprintf(fileStream,
                     "\tdata [NULL] {}\n"
                     "}\n"
@@ -414,7 +414,7 @@ void stackDumpInternal(FILE *fileStream, int stkID, bool isAdvanced,
     }
 }
 
-size_t stackGetSize(int stkID, StackError *status) {
+size_t stackGetSize(int stkID, StackStatus *status) {
     Stack* stk = getStack(stkID);
     if (!stk) {
         if (status) 
@@ -425,7 +425,7 @@ size_t stackGetSize(int stkID, StackError *status) {
     return stk->size;
 }
 
-size_t stackGetCapacity(int stkID, StackError* status) {
+size_t stackGetCapacity(int stkID, StackStatus* status) {
     Stack* stk = getStack(stkID);
     if (!stk) {
         if (status) 
@@ -436,7 +436,7 @@ size_t stackGetCapacity(int stkID, StackError* status) {
     return stk->capacity;
 }
 
-StackError stackGetError(int stkID) {
+StackStatus stackGetError(int stkID) {
     Stack* stk = getStack(stkID);
     if (!stk)
         return InvalidStackID;

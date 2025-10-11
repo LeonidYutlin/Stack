@@ -9,7 +9,7 @@ typedef int StackUnit;
 const uint8_t CONSTgenericStackError             = 0x10;
 const uint8_t CONSTgenericFunctionExecutionError = 0x20;
 
-enum StackError {
+enum StackStatus {
     OK = 0,
     UninitializedStack = CONSTgenericStackError,
     DestroyedStack,
@@ -34,16 +34,16 @@ typedef struct Stack {
     size_t size = 0;
     size_t capacity = 0;
     size_t capacityWithCanaries = 0;
-    StackError status = UninitializedStack;
+    StackStatus status = UninitializedStack;
 } Stack;
 
-StackError stackInit(Stack* stk, size_t initialCapacity);
-Stack* stackInit(size_t initialCapacity, StackError* status = NULL);
-StackError stackPush(Stack* stk, StackUnit value);
-StackUnit stackPop(Stack* stk, StackError* status = NULL);
-StackError stackVerify(Stack* stk);
-StackError stackDestroy(Stack* stk, bool isAlloced = false);
-StackError stackExpandCapacity(Stack* stk, size_t additionalCapacity);
+StackStatus stackInit(Stack* stk, size_t initialCapacity);
+Stack* stackInit(size_t initialCapacity, StackStatus* status = NULL);
+StackStatus stackPush(Stack* stk, StackUnit value);
+StackUnit stackPop(Stack* stk, StackStatus* status = NULL);
+StackStatus stackVerify(Stack* stk);
+StackStatus stackDestroy(Stack* stk, bool isAlloced = false);
+StackStatus stackExpandCapacity(Stack* stk, size_t additionalCapacity);
 
 #ifdef _DEBUG
 
