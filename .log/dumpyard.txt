@@ -1,257 +1,54 @@
 -----------------------
-[Q] I ATE IT ALL
-stackDump #0 called from spu/src/test/stackTest.cpp:23
-Stack (stackID = 0)
-{
-	size         = 5
-	capacity     = 5
-	capacityWithCanaries = 7
-	error = 0
-	isInitialized = 1
-	isDestroyed   = 0
-	data
-	{
-		 [0] = -555880979(CANARY)
-		*[1] = 10 
-		*[2] = 5 
-		*[3] = -4 
-		*[4] = 5 
-		*[5] = -4 
-		 [6] = -1427263782(CANARY)
-	}
-}
------------------------
------------------------
-[Q] Aaaaand what has went wrong now?
-stackDump #1 called from spu/src/test/stackTest.cpp:32
-Stack (stackID = 0)
-{
-	size         = 10
-	capacity     = 10
-	capacityWithCanaries = 12
-	error = 0
-	isInitialized = 1
-	isDestroyed   = 0
-	data
-	{
-		 [0] = -555880979(CANARY)
-		*[1] = 10 
-		*[2] = 5 
-		*[3] = -4 
-		*[4] = 5 
-		*[5] = -4 
-		*[6] = 6 
-		*[7] = 9 
-		*[8] = 8 
-		*[9] = 8 
-		*[10] = 8 
-		 [11] = -1427263782(CANARY)
-	}
-}
------------------------
------------------------
-[Q] I ATE IT ALL
-stackDump #2 called from spu/src/test/stackTest.cpp:38
-Stack (stackID = 0)
-{
-	size         = 13
-	capacity     = 20
-	capacityWithCanaries = 22
-	error = 0
-	isInitialized = 1
-	isDestroyed   = 0
-	data
-	{
-		 [0] = -555880979(CANARY)
-		*[1] = 10 
-		*[2] = 5 
-		*[3] = -4 
-		*[4] = 5 
-		*[5] = -4 
-		*[6] = 6 
-		*[7] = 9 
-		*[8] = 8 
-		*[9] = 8 
-		*[10] = 8 
-		*[11] = 8 
-		*[12] = 8 
-		*[13] = 8 
-		 [14] = 0 
-		 [15] = 0 
-		 [16] = 0 
-		 [17] = 0 
-		 [18] = 0 
-		 [19] = 0 
-		 [20] = 0 
-		 [21] = -1427263782(CANARY)
-	}
-}
------------------------
------------------------
-[Q] None of these words are in the Bible
-stackDump #3 called from spu/src/test/stackTest.cpp:46
-Stack (stackID = 0)
-{
-	size         = 12
-	capacity     = 20
-	capacityWithCanaries = 22
-	error = 0
-	isInitialized = 1
-	isDestroyed   = 0
-	data
-	{
-		 [0] = -555880979(CANARY)
-		*[1] = 10 
-		*[2] = 5 
-		*[3] = -4 
-		*[4] = 5 
-		*[5] = -4 
-		*[6] = 6 
-		*[7] = 9 
-		*[8] = 8 
-		*[9] = 8 
-		*[10] = 8 
-		*[11] = 8 
-		*[12] = 8 
-		 [13] = 0 
-		 [14] = 0 
-		 [15] = 0 
-		 [16] = 0 
-		 [17] = 0 
-		 [18] = 0 
-		 [19] = 0 
-		 [20] = 0 
-		 [21] = -1427263782(CANARY)
-	}
-}
------------------------
------------------------
-[Q] I ATE IT ALL
-stackDump #4 called from spu/src/test/stackTest.cpp:49
-Stack (stackID = 0)
-{
-	size         = 11
-	capacity     = 20
-	capacityWithCanaries = 22
-	error = 0
-	isInitialized = 1
-	isDestroyed   = 0
-	data
-	{
-		 [0] = -555880979(CANARY)
-		*[1] = 10 
-		*[2] = 5 
-		*[3] = -4 
-		*[4] = 5 
-		*[5] = -4 
-		*[6] = 6 
-		*[7] = 9 
-		*[8] = 8 
-		*[9] = 8 
-		*[10] = 8 
-		*[11] = 8 
-		 [12] = 0 
-		 [13] = 0 
-		 [14] = 0 
-		 [15] = 0 
-		 [16] = 0 
-		 [17] = 0 
-		 [18] = 0 
-		 [19] = 0 
-		 [20] = 0 
-		 [21] = -1427263782(CANARY)
-	}
-}
------------------------
------------------------
-[Q] Now with 800% more poison!
-stackDump #5 called from spu/src/test/stackTest.cpp:51
-Stack (stackID = 0)
-{
-	size         = 11
-	capacity     = 20
-	capacityWithCanaries = 22
-	error = 0
-	isInitialized = 1
-	isDestroyed   = 0
-	data
-	{
-		 [0] = -555880979(CANARY)
-		*[1] = 10 
-		*[2] = 5 
-		*[3] = -4 
-		*[4] = 5 
-		*[5] = -4 
-		*[6] = 6 
-		*[7] = 9 
-		*[8] = 8 
-		*[9] = 8 
-		*[10] = 8 
-		*[11] = 8 
-		 [12] = 0 
-		 [13] = 0 
-		 [14] = 0 
-		 [15] = 0 
-		 [16] = 0 
-		 [17] = 0 
-		 [18] = 0 
-		 [19] = 0 
-		 [20] = 0 
-		 [21] = -1427263782(CANARY)
-	}
-}
------------------------
------------------------
-[Q] Sunshine Banishes The Dark!
-stackDump #6 called from spu/src/test/stackTest.cpp:54
+[Q] Tut mogla bit' vasha oshibka
+stackDump #0 called from src/main.cpp:21
 Stack [NULL] {}
 -----------------------
 -----------------------
-[Q] stackDump soboleznuet
-stackDump #7 called from spu/src/test/stackTest.cpp:56
-Stack [NULL] {}
------------------------
------------------------
-[Q] Et tu, Brute?
-stackDump #8 called from spu/src/test/stackTest.cpp:66
-Stack (stackID = 0)
+[Q] Is my stack gonna make it? Prolly not
+stackDump #1 called from src/main.cpp:25
+Stack
 {
-	size         = 3
-	capacity     = 5
-	capacityWithCanaries = 7
+	size         = 1
+	capacity     = 33
+	capacityWithCanaries = 35
 	error = 0
-	isInitialized = 1
-	isDestroyed   = 0
 	data
 	{
 		 [0] = -555880979(CANARY)
-		*[1] = 10 
-		*[2] = 5 
-		*[3] = -4 
-		 [4] = 0 
-		 [5] = 0 
-		 [6] = -1427263782(CANARY)
-	}
-}
------------------------
------------------------
-[Q] SegFault? Not on my watch, bucko
-stackDump #9 called from spu/src/test/stackTest.cpp:83
-Stack (stackID = 6)
-{
-	size         = 0
-	capacity     = 3
-	capacityWithCanaries = 5
-	error = 0
-	isInitialized = 1
-	isDestroyed   = 0
-	data
-	{
-		 [0] = -555880979(CANARY)
-		 [1] = 0 
+		*[1] = 7 
 		 [2] = 0 
 		 [3] = 0 
-		 [4] = -1427263782(CANARY)
+		 [4] = 0 
+		 [5] = 0 
+		 [6] = 0 
+		 [7] = 0 
+		 [8] = 0 
+		 [9] = 0 
+		 [10] = 0 
+		 [11] = 0 
+		 [12] = 0 
+		 [13] = 0 
+		 [14] = 0 
+		 [15] = 0 
+		 [16] = 0 
+		 [17] = 0 
+		 [18] = 0 
+		 [19] = 0 
+		 [20] = 0 
+		 [21] = 0 
+		 [22] = 0 
+		 [23] = 0 
+		 [24] = 0 
+		 [25] = 0 
+		 [26] = 0 
+		 [27] = 0 
+		 [28] = 0 
+		 [29] = 0 
+		 [30] = 0 
+		 [31] = 0 
+		 [32] = 0 
+		 [33] = 0 
+		 [34] = -1427263782(CANARY)
 	}
 }
 -----------------------
