@@ -1,50 +1,60 @@
 -----------------------
-[Q] Boy oh boy I sure hope nothing bad has happened to my stack!
-stackDump #0 called from src/main.cpp:15
+[Q] Canary Canary Do Thy Hear Me ?
+stackDump #0 called from src/main.cpp:14
 Stack
 {
-	size         = 0
-	capacity     = 10
-	capacityWithCanaries = 12
-	error = 0
+	size                 = 0
+	capacity             = 3
+	capacityWithCanaries = 5
+	status = 0
 	data
 	{
 		 [0] = -555880979(CANARY)
 		 [1] = 0 
 		 [2] = 0 
 		 [3] = 0 
-		 [4] = 0 
-		 [5] = 0 
-		 [6] = 0 
-		 [7] = 0 
-		 [8] = 0 
-		 [9] = 0 
-		 [10] = 0 
-		 [11] = -1427263782(CANARY)
+		 [4] = -1427263782(CANARY)
 	}
 }
 -----------------------
 -----------------------
-[Q] Et tu, Brute?
-stackDump #1 called from src/main.cpp:22
-Stack [NULL] {}
------------------------
------------------------
-[Q] Appledog
-stackDump #2 called from src/main.cpp:26
+[Q] Is my stack gonna make it? Prolly not
+stackDump #1 called from src/main.cpp:21
 Stack
 {
-	size         = 1
-	capacity     = 33
-	capacityWithCanaries = 35
-	error = 0
+	size                 = 4
+	capacity             = 6
+	capacityWithCanaries = 8
+	status = 0
 	data
 	{
 		 [0] = -555880979(CANARY)
-		*[1] = 7 
-		 [2] = 0 
-		 [3] = 0 
-		 [4] = 0 
+		*[1] = 5 
+		*[2] = 2 
+		*[3] = -1 
+		*[4] = 7 
+		 [5] = 0 
+		 [6] = 0 
+		 [7] = -1427263782(CANARY)
+	}
+}
+-----------------------
+-----------------------
+[Q] One must imagine stackDump happy...
+stackDump #2 called from src/main.cpp:25
+Stack
+{
+	size                 = 4
+	capacity             = 29
+	capacityWithCanaries = 31
+	status = 0
+	data
+	{
+		 [0] = -555880979(CANARY)
+		*[1] = 5 
+		*[2] = 2 
+		*[3] = -1 
+		*[4] = 7 
 		 [5] = 0 
 		 [6] = 0 
 		 [7] = 0 
@@ -70,11 +80,7 @@ Stack
 		 [27] = 0 
 		 [28] = 0 
 		 [29] = 0 
-		 [30] = 0 
-		 [31] = 0 
-		 [32] = 0 
-		 [33] = 0 
-		 [34] = -1427263782(CANARY)
+		 [30] = -1427263782(CANARY)
 	}
 }
 -----------------------

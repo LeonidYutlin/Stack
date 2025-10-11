@@ -35,8 +35,8 @@ static const char* QUOTES[] = {
 static int printFormattedStackUnitString(FILE* fileStream, Stack* stk, 
                                          size_t index);
 
-void stackDump(FILE *fileStream, Stack* stk, bool isAdvanced,
-               const char *fileName, int line) {
+void stackDump(FILE* fileStream, Stack* stk, bool isAdvanced,
+               const char* fileName, int line) {
     assert(fileStream);
 
     static long callCount = 0;
@@ -66,10 +66,10 @@ void stackDump(FILE *fileStream, Stack* stk, bool isAdvanced,
                    "stackDump #%ld called from %s:%d\n"
                     "Stack [%p]\n"
                     "{\n"
-                    "\tsize         = %lu\n"
-                    "\tcapacity     = %lu\n"
+                    "\tsize                 = %lu\n"
+                    "\tcapacity             = %lu\n"
                     "\tcapacityWithCanaries = %lu\n"
-                    "\t%serror = %d\n",
+                    "\t%sstatus = %d\n",
                     QUOTES[(unsigned long)random()
                             % (sizeof(QUOTES) / sizeof(char *))],
                     callCount++, fileName, line,
@@ -85,10 +85,10 @@ void stackDump(FILE *fileStream, Stack* stk, bool isAdvanced,
                    "stackDump #%ld called from %s:%d\n"
                     "Stack\n"
                     "{\n"
-                    "\tsize         = %lu\n"
-                    "\tcapacity     = %lu\n"
+                    "\tsize                 = %lu\n"
+                    "\tcapacity             = %lu\n"
                     "\tcapacityWithCanaries = %lu\n"
-                    "\t%serror = %d\n",
+                    "\t%sstatus = %d\n",
                     QUOTES[(unsigned long)random()
                             % (sizeof(QUOTES) / sizeof(char *))],
                     callCount++, fileName, line,

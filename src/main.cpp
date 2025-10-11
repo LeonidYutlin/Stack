@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-#include "stack/stack.h"
+#include "stack/stackSecured.h"
 
 int main() {
     FILE* dumpyard = fopen("../.log/dumpyard.txt", "w");
@@ -8,25 +8,23 @@ int main() {
         puts("Error opening file!");
          return -1;
     }
+    
+    StackStatus stkSt = OK;
+    Stack_t stk = stackInit(3, &stkSt);
+    stackDump(dumpyard, stk);
 
-    Stack stk = {};
-    Stack* stkAlloced = stackInit(10);
-    stackInit(&stk, 10);
-    stackDump(dumpyard, &stk);
+    stackPush(stk, 5);
+    stackPush(stk, 2);
+    stackPush(stk, -1);
+    stackPush(stk, 7);
 
-    stackPush(stkAlloced, 5);
-    stackPush(stkAlloced, 2);
-    stackPush(stkAlloced, -1);
-    stackPush(&stk, 7);
+    stackDump(dumpyard, stk);
 
-    stackDump(dumpyard, stkAlloced);
+    stackExpandCapacity(stk, 23);
 
-    stackExpandCapacity(&stk, 23);
+    stackDump(dumpyard, stk);
 
-    stackDump(dumpyard, &stk);
-
-    stackDestroy(&stk);
-    stackDestroy(stkAlloced, true);
+    stackDestroy(stk);
 
     // Stack_t stk = stackInit(5);
     // if (stk < 0) {

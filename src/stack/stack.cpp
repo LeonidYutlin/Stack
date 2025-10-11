@@ -15,8 +15,10 @@
 
 static StackStatus stackCheckCanaries(Stack* stk);
 
-StackStatus stackInit(Stack* stk, size_t initialCapacity){
-    if (stackVerify(stk) != UninitializedStack)
+StackStatus stackInit(Stack* stk, size_t initialCapacity) {
+    StackStatus status = stackVerify(stk);
+    if (status != UninitializedStack
+        && status != DestroyedStack)
         return AttemptedReinitialization;
     if (initialCapacity == 0)
         return BadInitialCapacity;
@@ -25,9 +27,10 @@ StackStatus stackInit(Stack* stk, size_t initialCapacity){
                                   + CANARY_RIGHT_COUNT;
 
     StackUnit* tempPtr = (StackUnit*)calloc(capacityWithCanaries, sizeof(StackUnit));
-    if (!tempPtr)
+    if (!tempPtr) {
         return stk->status = FailMemoryAllocation;
-
+    }
+        
     stk->data = tempPtr;
     stk->size = 0;
     stk->capacity = initialCapacity;
@@ -41,7 +44,7 @@ StackStatus stackInit(Stack* stk, size_t initialCapacity){
     return stackVerify(stk);
 }
 
-Stack* stackInit(size_t initialCapacity, StackStatus* status) {
+Stack* stackDynamicInit(size_t initialCapacity, StackStatus* status) {
     if (initialCapacity == 0) {
         if (status)
             *status = BadInitialCapacity;
@@ -54,7 +57,8 @@ Stack* stackInit(size_t initialCapacity, StackStatus* status) {
             *status = FailMemoryAllocation;
         return NULL;
     }
-
+    
+    *stk = {0};
     if (stackInit(stk, initialCapacity)) {
         if (status)
             *status = FailMemoryAllocation;
@@ -67,7 +71,7 @@ Stack* stackInit(size_t initialCapacity, StackStatus* status) {
     return stk;
 }
 
-StackStatus stackPush(Stack* stk, StackUnit value){
+StackStatus stackPush(Stack* stk, StackUnit value) {
     StackStatus stackStatus = stackVerify(stk);
     if (stackStatus)
         return stackStatus;
@@ -86,7 +90,7 @@ StackStatus stackPush(Stack* stk, StackUnit value){
     return stackVerify(stk);
 }
 
-StackUnit stackPop(Stack* stk, StackStatus* status){
+StackUnit stackPop(Stack* stk, StackStatus* status) {
     StackStatus stackStatus = stackVerify(stk);
     if (stackStatus) {
         if (status)
@@ -123,7 +127,7 @@ StackUnit stackPop(Stack* stk, StackStatus* status){
     return value;
 }
 
-StackStatus stackDestroy(Stack* stk, bool isAlloced){
+StackStatus stackDestroy(Stack* stk, bool isAlloced) {
     if (!stk)
         return NullStackPointer;
 
@@ -144,7 +148,7 @@ StackStatus stackDestroy(Stack* stk, bool isAlloced){
     return OK;
 }
 
-StackStatus stackVerify(Stack* stk){
+StackStatus stackVerify(Stack* stk) {
     if (!stk)
         return NullStackPointer;
     if (stk->status)

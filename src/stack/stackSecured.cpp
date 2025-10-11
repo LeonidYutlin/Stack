@@ -6,10 +6,10 @@
 #include <string.h>
 #include <time.h>
 
-#include "stackSecured.h"
 #include "stack.h"
+#include "stackSecured.h"
 
-static const size_t INITIAL_STACK_MANAGER_CAPACITY = 5;
+static const size_t DEFAULT_INITIAL_STACK_MANAGER_CAPACITY = 5;
 typedef struct StackManager {
     size_t size     = 0;
     size_t capacity = 0;
@@ -17,7 +17,10 @@ typedef struct StackManager {
 } StackManager;
 static StackManager STACK_MANAGER = {0};
 
-static Stack* getStack(int stkID);
+static StackStatus allocStackManagerData();
+static void freeEmptyStackManager();
+static Stack* getStack(Stack_t stkID);
+static int findFreeStackId();
 
 #ifdef _DEBUG
 
@@ -27,209 +30,78 @@ static Stack* getStack(int stkID);
 
 #endif
 
-int stackInit(size_t initialCapacity){
-    if (initialCapacity == 0) 
-        return InvalidInitialCapacityError;
-
-    if (!STACK_MANAGER.data) {
-        Stack** tempPtr = (Stack**)calloc(INITIAL_STACK_MANAGER_CAPACITY, 
-                                          sizeof(Stack*));
-        if (!tempPtr)
-            return MemoryAllocationError;
-
-        STACK_MANAGER.capacity = INITIAL_STACK_MANAGER_CAPACITY;
-        STACK_MANAGER.size = 0;
-        STACK_MANAGER.data = tempPtr;
-    } else if (STACK_MANAGER.size == STACK_MANAGER.capacity) {
-        Stack** tempPtr = (Stack**)realloc(STACK_MANAGER.data, 
-                                           2 * STACK_MANAGER.capacity 
-                                           * sizeof(Stack*));
-        if (!tempPtr)
-            return MemoryReallocationError;
-            
-        STACK_MANAGER.capacity *= 2;
-        STACK_MANAGER.data = tempPtr;
+Stack_t stackInit(size_t initialCapacity, StackStatus* statusPtr) {
+    if (initialCapacity == 0) {
+        if (statusPtr)
+            *statusPtr = BadInitialCapacity;
+        return -1;
     }
 
-    Stack* stk = (Stack*)calloc(1, sizeof(Stack));
-    if (!stk)
-        return MemoryAllocationError;
-    int stkID = -1;
-    for (int i = 0; i < (int)STACK_MANAGER.size; i++) {
-        if (STACK_MANAGER.data[i] == NULL) {
-            stkID = i;
-            break;
-        }
+    StackStatus status = allocStackManagerData();
+    if (status) {
+        if (statusPtr)
+            *statusPtr = status;
+        return -1;
     }
-    if (stkID == -1) 
-        stkID = (int)STACK_MANAGER.size;
+    Stack* stk = stackDynamicInit(initialCapacity, &status);
+    if (status) {
+        if (statusPtr)
+            *statusPtr = status;
+        freeEmptyStackManager();
+        return -1;
+    }
+    Stack_t stkID = findFreeStackId();
     STACK_MANAGER.data[stkID] = stk;
     STACK_MANAGER.size++;
 
-    size_t capacityWithCanaries = initialCapacity + CANARY_LEFT_COUNT 
-                          + CANARY_RIGHT_COUNT;
-    StackUnit* tempPtr = (StackUnit*)calloc(capacityWithCanaries, sizeof(StackUnit));
-    if (!tempPtr)
-        return stk->status = MemoryAllocationError;
-
-    stk->data = tempPtr;
-    stk->size = 0;
-    stk->capacity = initialCapacity;
-    stk->capacityWithCanaries = capacityWithCanaries;
-    stk->status = NaE;
-    stk->isDestroyed = false;
-    stk->isInitialized = true;
-    for (size_t i = 0; i < CANARY_LEFT_COUNT; i++)
-        stk->data[i] = CANARY_LEFT;
-    for (size_t i = 0; i < CANARY_RIGHT_COUNT; i++)
-        stk->data[stk->capacityWithCanaries - 1 - i] = CANARY_RIGHT;
-
-    /*
-    A way of doing all this via cpp's default struct values
-    *stk = {.data = tempPtr,
-            .capacity = initialCapacity,
-            .isInitialized = true
-            .status = NaE};
-    */
-
-    /*
-    if (!(stackStatus = stackVerify(stkID)))
-        return stackStatus;
-
-    return stackStatus;
-    */
-
-    StackStatus status = stackVerify(stkID);
-    //stackDumpInternal(stdout, stkID, true);
-    return status == NaE ? stkID : status;
+    status = stackVerify(stkID);
+    if (statusPtr)
+            *statusPtr = status;
+    return status == OK ? stkID : -1;
 }
 
-StackStatus stackPush(int stkID, StackUnit value){
+StackStatus stackPush(Stack_t stkID, StackUnit value) {
     Stack* stk = getStack(stkID);
     if (!stk)
         return InvalidStackID;
 
-    StackStatus stackStatus = NaE;
-    if ((stackStatus = stackVerify(stkID)))
-        return stackStatus;
-
-    size_t previousSize = stk->size;
-    if (previousSize == stk->capacity) {
-        StackUnit *tempPtr = (StackUnit*)realloc(stk->data,
-                                                 (stk->capacityWithCanaries + stk->capacity)
-                                                 * sizeof(StackUnit));
-        if (!tempPtr)
-            return stk->status = MemoryReallocationError;
-        memset(tempPtr + CANARY_LEFT_COUNT + previousSize, 0, 
-               (stk->capacity + CANARY_RIGHT_COUNT) * sizeof(StackUnit));
-        stk->capacityWithCanaries += stk->capacity;
-        stk->capacity *= 2;
-        stk->data = tempPtr;
-        for (size_t i = 0; i < CANARY_RIGHT_COUNT; i++)
-            stk->data[stk->capacityWithCanaries - 1 - i] = CANARY_RIGHT;
-    }
-
-    stk->data[CANARY_LEFT_COUNT + stk->size++] = value;
-
-    if (stk->size != previousSize + 1)
-        return stk->status = IncrementationError;
-    if (stk->data[CANARY_LEFT_COUNT + previousSize] != value)
-        return stk->status = TransmutedValueError;
-
-    return stackVerify(stkID);
+    return stackPush(stk, value);
 }
 
-StackUnit stackPop(int stkID, StackStatus *status){
+StackUnit stackPop(Stack_t stkID, StackStatus *status) {
     Stack* stk = getStack(stkID);
     if (!stk)
         return InvalidStackID;
 
-    StackStatus stackStatus = NaE;
-    if ((stackStatus = stackVerify(stkID))) {
-        if (status)
-            *status = stk->status;
-        return STACK_POISON;
-    }
-
-    size_t previousSize = stk->size;
-
-    if (stk->size == 0) {
-        stk->status = NothingToPopError;
-        if (status)
-            *status = stk->status;
-        return STACK_POISON;
-    }
-
-    StackUnit value = stk->data[CANARY_LEFT_COUNT + (--stk->size)];
-    stk->data[CANARY_LEFT_COUNT + stk->size] = 0;
-
-    if (stk->size != previousSize - 1) {
-        stk->status = DecrementationError;
-        if (status)
-            *status = stk->status;
-        return value;
-    }
-    if (stk->data[CANARY_LEFT_COUNT + previousSize] != 0) {
-        stk->status = FailedPopError;
-        if (status)
-            *status = stk->status;
-        return value;
-    }
-
-    if (status)
-        *status = stackVerify(stkID);
-    return value;
+    return stackPop(stk, status);
 }
 
-StackStatus stackDestroy(int stkID){
+StackStatus stackDestroy(Stack_t stkID) {
     Stack* stk = getStack(stkID);
     if (!stk)
         return InvalidStackID;
 
-    if (stk->data) {
-        for (size_t i = 0; i < stk->capacityWithCanaries; i++)
-            stk->data[i] = STACK_POISON;
-        free(stk->data);
-        stk->data = NULL;
-    }
-
-    stk->size = 0;
-    stk->capacity = 0;
-    stk->status = InvalidStackID;
-    stk->isInitialized = false;
-    stk->isDestroyed = true;
-
-    free(stk);
+    stackDestroy(stk, true);
     STACK_MANAGER.data[stkID] = NULL;
     STACK_MANAGER.size--;
-    if (STACK_MANAGER.size == 0) {
-        free(STACK_MANAGER.data);
-        STACK_MANAGER.data = NULL;
-    }
-    return NaE;
+    freeEmptyStackManager();
+
+    return OK;
 }
 
-StackStatus stackVerify(int stkID){
+StackStatus stackVerify(Stack_t stkID) {
     Stack* stk = getStack(stkID);
     if (!stk)
         return InvalidStackID;
-    if (!stk->data)
-        return stk->status = NullDataPointerError;
-    if (stk->capacity == 0)
-        return stk->status = InvalidCapacityError;
-    if (stk->size > stk->capacity)
-        return stk->status = SizeOutOfBoundsError;
-    return stk->status = stackCheckCanaries(stk);
+    return stk->status = stackVerify(stk);
 }
 
-StackStatus stackCheckCanaries(Stack* stk) {
-    for (size_t i = 0; i < CANARY_LEFT_COUNT; i++)
-        if (stk->data[i] != CANARY_LEFT) 
-            return CorruptedCanaryError;
-    for (size_t i = 0; i < CANARY_RIGHT_COUNT; i++)
-        if (stk->data[stk->capacityWithCanaries - 1 - i] != CANARY_RIGHT) 
-            return CorruptedCanaryError;
-    return NaE;
+StackStatus stackExpandCapacity(Stack_t stkID, size_t additionalCapacity) {
+    Stack* stk = getStack(stkID);
+    if (!stk)
+        return InvalidStackID;
+
+    return stackExpandCapacity(stk, additionalCapacity);
 }
 
 size_t stackGetSize(Stack_t stkID, StackStatus *status) {
@@ -262,141 +134,64 @@ size_t stackGetCapacity(Stack_t stkID, StackStatus* status) {
 //     return stk->status;
 // }
 
+#undef stackDump
+void stackDumpSecured(FILE* fileStream, Stack_t stkID,
+                      const char* fileName, int line) {
+    assert(fileStream);
+
+    return stackDump(fileStream, getStack(stkID), false, fileName, line);
+}
+
+StackStatus allocStackManagerData() {
+    if (!STACK_MANAGER.data) {
+        Stack** tempPtr = (Stack**)calloc(DEFAULT_INITIAL_STACK_MANAGER_CAPACITY, 
+                                          sizeof(Stack*));
+        if (!tempPtr)
+            return FailMemoryAllocation;
+
+        STACK_MANAGER.capacity = DEFAULT_INITIAL_STACK_MANAGER_CAPACITY;
+        STACK_MANAGER.size = 0;
+        STACK_MANAGER.data = tempPtr;
+    } else if (STACK_MANAGER.size == STACK_MANAGER.capacity) {
+        Stack** tempPtr = (Stack**)realloc(STACK_MANAGER.data, 
+                                           2 * STACK_MANAGER.capacity 
+                                           * sizeof(Stack*));
+        if (!tempPtr)
+            return FailMemoryReallocation;
+            
+        STACK_MANAGER.capacity *= 2;
+        STACK_MANAGER.data = tempPtr;
+    }
+
+    return OK;
+}
+
+void freeEmptyStackManager() {
+    if (STACK_MANAGER.size == 0) {
+        free(STACK_MANAGER.data);
+        STACK_MANAGER.data = NULL;
+    }
+}
+
 Stack* getStack(Stack_t stkID) {
-    return stkID < 0 || stkID >= STACK_MANAGER.size 
+    return stkID < 0 || (unsigned int)stkID >= STACK_MANAGER.size 
            ? NULL 
            : STACK_MANAGER.data[stkID];
 }
 
-int printFormattedStackUnitString(FILE* fileStream, Stack* stk, size_t index) {
-    assert(fileStream);
-    assert(stk);
-
-    StackUnit value = stk->data[index];
-    const char* prefix = (index >= CANARY_LEFT_COUNT 
-                          && index < CANARY_LEFT_COUNT + stk->size
-                          && value != STACK_POISON)
-                          ?  "*" : " ";
-    const char* suffix = (value != STACK_POISON) 
-                          ? " " : "(POISON)";
-    if (index < CANARY_LEFT_COUNT) {
-        bool isCorrupted = (value != CANARY_LEFT);
-        prefix = isCorrupted ? "!" : " ";
-        suffix = isCorrupted ? "(CORRUPTED CANARY)" : "(CANARY)";
-    } else if ((stk->capacityWithCanaries - 1 - index) < CANARY_RIGHT_COUNT) {
-        bool isCorrupted = (value != CANARY_RIGHT);
-        prefix = isCorrupted ? "!" : " ";
-        suffix = isCorrupted ? "(CORRUPTED CANARY)" : "(CANARY)";
-    }
-
-    return fprintf(fileStream, "\t\t%s[%lu] = %d%s\n", prefix, index, value, suffix);
-}
-
-#undef stackDumpInternal
-
-void stackDump(FILE *fileStream, int stkID,
-               const char *fileName, int line) {
-    assert(fileStream);
-
-    return stackDumpInternal(fileStream, stkID, false, fileName, line);
-}
-
-void stackDumpInternal(FILE *fileStream, int stkID, bool isAdvanced,
-               const char *fileName, int line) {
-    assert(fileStream);
-
-    Stack* stk = getStack(stkID);
-
-    static long callCount = 0;
-
-    static bool isRandomInitialized = false;
-    if (!isRandomInitialized) {
-        srand((unsigned int)time(NULL));
-        isRandomInitialized = true;
-    }
-
-    StackStatus stackStatus = stackVerify(stkID);
-    if (stk == NULL) {
-        fprintf(fileStream,
-                "-----------------------\n"
-                "[Q] %s\n"
-                "stackDump #%ld called from %s:%d\n"
-                "Stack [NULL] {}\n"
-                "-----------------------\n",
-                QUOTES[(unsigned long)random()
-                        % (sizeof(QUOTES) / sizeof(char *))],
-                callCount++, fileName, line);
-    } else {
-        if (isAdvanced) {
-            fprintf(fileStream,
-                    "-----------------------\n"
-                    "[Q] %s\n"
-                   "stackDump #%ld called from %s:%d\n"
-                    "Stack (stackID = %d) [%p]\n"
-                    "{\n"
-                    "\tsize         = %lu\n"
-                    "\tcapacity     = %lu\n"
-                    "\tcapacityWithCanaries = %lu\n"
-                    "\t%serror = %d\n"
-                    "\tisInitialized = %d\n"
-                    "\tisDestroyed   = %d\n",
-                    QUOTES[(unsigned long)random()
-                            % (sizeof(QUOTES) / sizeof(char *))],
-                    callCount++, fileName, line,
-                    stkID, stk,
-                    stk->size,
-                    stk->capacity,
-                    stk->capacityWithCanaries,
-                    stk->status == NaE ? "" : "[!] ", stk->status,
-                    stk->isInitialized,
-                    stk->isDestroyed);
-        } else {
-            fprintf(fileStream,
-                    "-----------------------\n"
-                    "[Q] %s\n"
-                   "stackDump #%ld called from %s:%d\n"
-                    "Stack (stackID = %d)\n"
-                    "{\n"
-                    "\tsize         = %lu\n"
-                    "\tcapacity     = %lu\n"
-                    "\tcapacityWithCanaries = %lu\n"
-                    "\t%serror = %d\n"
-                    "\tisInitialized = %d\n"
-                    "\tisDestroyed   = %d\n",
-                    QUOTES[(unsigned long)random()
-                            % (sizeof(QUOTES) / sizeof(char *))],
-                    callCount++, fileName, line,
-                    stkID,
-                    stk->size,
-                    stk->capacity,
-                    stk->capacityWithCanaries,
-                    stk->status == NaE ? "" : "[!] ", stk->status,
-                    stk->isInitialized,
-                    stk->isDestroyed);
-        }
-
-        if (stackStatus == NullDataPointerError || stk->data == NULL) {
-            fprintf(fileStream,
-                    "\tdata [NULL] {}\n"
-                    "}\n"
-                    "-----------------------\n");
-        } else {
-            if (isAdvanced) {
-                fprintf(fileStream,
-                        "\tdata [%p]\n"
-                        "\t{\n",
-                      stk->data);
-            } else {
-                fputs("\tdata\n"
-                      "\t{\n", 
-                      fileStream);
-            }
-            for (size_t i = 0; i < stk->capacityWithCanaries; i++) 
-                printFormattedStackUnitString(fileStream, stk, i);
-            fprintf(fileStream,
-                    "\t}\n"
-                    "}\n"
-                    "-----------------------\n");
+/* 
+    I know that a cast to (int) loses info but I need it to be an int and I dont think
+    someone is making a StackManager that is so large it cannot cope 
+    with unsigned long being cast to int
+*/
+int findFreeStackId() {
+    int stkID = -1;
+    for (int i = 0; i < (int)STACK_MANAGER.size; i++) {
+        if (STACK_MANAGER.data[i] == NULL) {
+            stkID = i;
+            break;
         }
     }
+
+    return stkID == -1 ? (int)STACK_MANAGER.size : stkID;
 }
