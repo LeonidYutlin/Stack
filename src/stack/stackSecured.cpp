@@ -7,72 +7,23 @@
 #include <time.h>
 
 #include "stackSecured.h"
-
-#undef stackDump
-
-static const StackUnit STACK_POISON = 0xAbD06;
-
-static const StackUnit CANARY_LEFT = 0xDEDDEDED;
-static const StackUnit CANARY_RIGHT = 0xAAEDAEDA;
-
-static const size_t CANARY_LEFT_COUNT = 1;
-static const size_t CANARY_RIGHT_COUNT = 1;
-
-static const char* QUOTES[] = {
-    "Canary Canary Do Thy Hear Me ?",
-    "SegFault? Not on my watch, bucko",
-    "Aaaaand what has went wrong now?",
-    "None of these words are in the Bible",
-    "Et tu, Brute?",
-    "Appledog",
-    "Is my stack gonna make it? Prolly not",
-    "OUR FOOD KEEPS BLOWING U-",
-    "Now with 800% more poison!",
-    "One must imagine stackDump happy...",
-    "Boy oh boy I sure hope nothing bad has happened to my stack!",
-    "I ATE IT ALL",
-    "Ouch! That hurt!",
-    "stackDump soboleznuet",
-    "Tut mogla bit' vasha oshibka",
-    "So what are you gonna say at my funeral now that you've killed me",
-    "Fishy Fiesta is real",
-    "Sunshine Banishes The Dark!"
-};
-
-typedef struct Stack {
-    StackUnit* data = NULL;
-    size_t size = 0;
-    size_t capacity = 0;
-    size_t capacityWithCanaries = 0;
-    StackStatus status = InvalidStackID;
-    bool isDestroyed = false;
-    bool isInitialized = false;
-} Stack;
+#include "stack.h"
 
 static const size_t INITIAL_STACK_MANAGER_CAPACITY = 5;
 typedef struct StackManager {
-    size_t size = 0;
+    size_t size     = 0;
     size_t capacity = 0;
     Stack** data = NULL;
 } StackManager;
 static StackManager STACK_MANAGER = {0};
 
 static Stack* getStack(int stkID);
-static StackStatus stackCheckCanaries(Stack* stk);
-static int printFormattedStackUnitString(FILE* fileStream, 
-                                         Stack* stk, size_t index);
-
-static void stackDumpInternal(FILE* fileStream, int stkID, bool isAdvanced, 
-                              const char* fileName, int line);
 
 #ifdef _DEBUG
 
-#define stackDumpInternal(fileStream, stkID, isAdvanced) \
-    stackDumpInternal(fileStream, stkID, isAdvanced, __FILE__, __LINE__);
-
-#else
-
-#define stackDumpInternal(fileStream, stkID, isAdvanced) ;
+#undef  stackDump
+#define stackDump(fileStream, stk) \
+        stackDump(fileStream, stk, true, __FILE__, __LINE__);
 
 #endif
 
@@ -281,6 +232,42 @@ StackStatus stackCheckCanaries(Stack* stk) {
     return NaE;
 }
 
+size_t stackGetSize(Stack_t stkID, StackStatus *status) {
+    Stack* stk = getStack(stkID);
+    if (!stk) {
+        if (status) 
+            *status = InvalidStackID;
+        return 0;
+    }
+
+    return stk->size;
+}
+
+size_t stackGetCapacity(Stack_t stkID, StackStatus* status) {
+    Stack* stk = getStack(stkID);
+    if (!stk) {
+        if (status) 
+            *status = InvalidStackID;
+        return 0;
+    }
+
+    return stk->capacity;
+}
+
+// StackStatus stackGetError(int stkID) {
+//     Stack* stk = getStack(stkID);
+//     if (!stk)
+//         return InvalidStackID;
+
+//     return stk->status;
+// }
+
+Stack* getStack(Stack_t stkID) {
+    return stkID < 0 || stkID >= STACK_MANAGER.size 
+           ? NULL 
+           : STACK_MANAGER.data[stkID];
+}
+
 int printFormattedStackUnitString(FILE* fileStream, Stack* stk, size_t index) {
     assert(fileStream);
     assert(stk);
@@ -412,40 +399,4 @@ void stackDumpInternal(FILE *fileStream, int stkID, bool isAdvanced,
                     "-----------------------\n");
         }
     }
-}
-
-size_t stackGetSize(int stkID, StackStatus *status) {
-    Stack* stk = getStack(stkID);
-    if (!stk) {
-        if (status) 
-            *status = InvalidStackID;
-        return 0;
-    }
-
-    return stk->size;
-}
-
-size_t stackGetCapacity(int stkID, StackStatus* status) {
-    Stack* stk = getStack(stkID);
-    if (!stk) {
-        if (status) 
-            *status = InvalidStackID;
-        return 0;
-    }
-
-    return stk->capacity;
-}
-
-StackStatus stackGetError(int stkID) {
-    Stack* stk = getStack(stkID);
-    if (!stk)
-        return InvalidStackID;
-
-    return stk->status;
-}
-
-Stack* getStack(int stkID) {
-    return stkID < 0 || (unsigned int)stkID >= STACK_MANAGER.size 
-           ? NULL 
-           : STACK_MANAGER.data[stkID];
 }

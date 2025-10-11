@@ -12,6 +12,7 @@ int main() {
     Stack stk = {};
     Stack* stkAlloced = stackInit(10);
     stackInit(&stk, 10);
+    stackDump(dumpyard, &stk);
 
     stackPush(stkAlloced, 5);
     stackPush(stkAlloced, 2);
