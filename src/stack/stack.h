@@ -34,13 +34,13 @@ typedef struct Stack {
     size_t size = 0;
     size_t capacity = 0;
     size_t capacityWithCanaries = 0;
-    StackError error = UninitializedStack;
+    StackError status = UninitializedStack;
 } Stack;
 
 StackError stackInit(Stack* stk, size_t initialCapacity);
-Stack* stackInit(size_t initialCapacity, StackError* error = NULL);
+Stack* stackInit(size_t initialCapacity, StackError* status = NULL);
 StackError stackPush(Stack* stk, StackUnit value);
-StackUnit stackPop(Stack* stk, StackError* error = NULL);
+StackUnit stackPop(Stack* stk, StackError* status = NULL);
 StackError stackVerify(Stack* stk);
 StackError stackDestroy(Stack* stk, bool isAlloced = false);
 StackError stackExpandCapacity(Stack* stk, size_t additionalCapacity);

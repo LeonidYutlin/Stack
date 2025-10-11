@@ -14,7 +14,7 @@ typedef int Stack_t;
     -1xx is genericStackError
     -2xx is genericFunctionExecutionError
 */
-enum StackError {
+enum StackStatus {
     NaE                         =    0, //NotAnError
     InvalidStackID              = -100,
     NullDataPointerError        = -101,
@@ -54,17 +54,17 @@ const uint32_t CONSTgenericFunctionExecutionError = 0x40;
 // };
 
 Stack_t    stackInit(size_t initialCapacity);
-StackError stackPush(Stack_t stk, StackUnit value);
-StackUnit  stackPop(Stack_t stk, StackError* error = NULL);
-StackError stackVerify(Stack_t stk);
-StackError stackDestroy(Stack_t stk);
+StackStatus stackPush(Stack_t stk, StackUnit value);
+StackUnit  stackPop(Stack_t stk, StackStatus* status = NULL);
+StackStatus stackVerify(Stack_t stk);
+StackStatus stackDestroy(Stack_t stk);
 
-size_t stackGetSize(Stack_t stk, StackError* error = NULL);
-size_t stackGetCapacity(Stack_t stk, StackError* error = NULL);
-StackError stackGetError(Stack_t stk); //  
+size_t stackGetSize(Stack_t stk, StackStatus* status = NULL);
+size_t stackGetCapacity(Stack_t stk, StackStatus* status = NULL);
+StackStatus stackGetError(Stack_t stk); //  
 
 // ErrorDiscription {
-//     StackError // popError
+//     StackStatus // popError
 //     discription // size == 0
 //     ling discription // на момент вызова функции pop  
 //     // функции необходимо...

@@ -29,7 +29,7 @@ int main() {
 
     // Stack_t stk = stackInit(5);
     // if (stk < 0) {
-    //     printf("Cant init stack, error code: %d", stk);
+    //     printf("Cant init stack, status code: %d", stk);
     // }
     // printf("Error code: %d\n", stackPush(stk, 10));
     // printf("Error code: %d\n", stackPush(stk, 5));
@@ -54,15 +54,15 @@ int main() {
 
     // stackDump(dumpyard, stk);
 
-    // StackError error = NaE;
+    // StackStatus status = NaE;
 
     // printf("current index: %lu out of %lu total elements\n", stackGetSize(stk), stackGetCapacity(stk));
 
     // printf("Current element in stack: %d\n", stackPop(stk));
-    // printf("Error code: %d\n", error);
+    // printf("Error code: %d\n", status);
     // stackDump(dumpyard, stk);
-    // printf("Current element in stack: %d\n", stackPop(stk, &error));
-    // printf("Error code: %d\n", error);
+    // printf("Current element in stack: %d\n", stackPop(stk, &status));
+    // printf("Error code: %d\n", status);
     // stackDump(dumpyard, stk);
 
     // stackDump(dumpyard, stk);
@@ -74,7 +74,7 @@ int main() {
 
     // Stack_t stk2 = stackInit(5);
     // if (stk2 < 0) {
-    //     printf("Cant init stack, error code: %d", stk);
+    //     printf("Cant init stack, status code: %d", stk);
     // }
     // printf("Error code: %d\n", stackPush(stk2, 10));
     // printf("Error code: %d\n", stackPush(stk2, 5));

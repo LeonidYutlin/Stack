@@ -16,7 +16,7 @@ static const StackUnit CANARY_RIGHT = (StackUnit)0xAAEDAEDA;
 static const size_t CANARY_LEFT_COUNT  = 1;
 static const size_t CANARY_RIGHT_COUNT = 1;
 
-static StackError stackCheckCanaries(Stack* stk);
+static StackStatus stackCheckCanaries(Stack* stk);
 
 #ifdef _DEBUG
 
@@ -57,7 +57,7 @@ static void stackDumpInternal(FILE* fileStream, Stack* stk, bool isAdvanced,
 
 #endif
 
-StackError stackInit(Stack* stk, size_t initialCapacity){
+StackStatus stackInit(Stack* stk, size_t initialCapacity){
     if (stackVerify(stk) != UninitializedStack)
         return AttemptedReinitialization;
     if (initialCapacity == 0)
@@ -68,13 +68,13 @@ StackError stackInit(Stack* stk, size_t initialCapacity){
 
     StackUnit* tempPtr = (StackUnit*)calloc(capacityWithCanaries, sizeof(StackUnit));
     if (!tempPtr)
-        return stk->error = FailMemoryAllocation;
+        return stk->status = FailMemoryAllocation;
 
     stk->data = tempPtr;
     stk->size = 0;
     stk->capacity = initialCapacity;
     stk->capacityWithCanaries = capacityWithCanaries;
-    stk->error = OK;
+    stk->status = OK;
     for (size_t i = 0; i < CANARY_LEFT_COUNT; i++)
         stk->data[i] = CANARY_LEFT;
     for (size_t i = 0; i < CANARY_RIGHT_COUNT; i++)
@@ -83,63 +83,63 @@ StackError stackInit(Stack* stk, size_t initialCapacity){
     return stackVerify(stk);
 }
 
-Stack* stackInit(size_t initialCapacity, StackError* error) {
+Stack* stackInit(size_t initialCapacity, StackStatus* status) {
     if (initialCapacity == 0) {
-        if (error)
-            *error = BadInitialCapacity;
+        if (status)
+            *status = BadInitialCapacity;
         return NULL;
     }
 
     Stack* stk = (Stack*)calloc(1, sizeof(Stack));
     if (!stk) {
-        if (error)
-            *error = FailMemoryAllocation;
+        if (status)
+            *status = FailMemoryAllocation;
         return NULL;
     }
 
     if (stackInit(stk, initialCapacity)) {
-        if (error)
-            *error = FailMemoryAllocation;
+        if (status)
+            *status = FailMemoryAllocation;
         free(stk);
         return NULL;
     }
 
-    if (error)
-        *error = stackVerify(stk);
+    if (status)
+        *status = stackVerify(stk);
     return stk;
 }
 
-StackError stackPush(Stack* stk, StackUnit value){
-    StackError stackError = stackVerify(stk);
-    if (stackError)
-        return stackError;
+StackStatus stackPush(Stack* stk, StackUnit value){
+    StackStatus stackStatus = stackVerify(stk);
+    if (stackStatus)
+        return stackStatus;
 
     if (stk->size == stk->capacity)
-        if ((stackError = stackExpandCapacity(stk, stk->capacity)))
-            return stackError;
+        if ((stackStatus = stackExpandCapacity(stk, stk->capacity)))
+            return stackStatus;
     
     size_t previousSize = stk->size;
     stk->data[CANARY_LEFT_COUNT + stk->size++] = value;
     if (stk->size != previousSize + 1)
-        return stk->error = FailIncrement;
+        return stk->status = FailIncrement;
     if (stk->data[CANARY_LEFT_COUNT + previousSize] != value)
-        return stk->error = PushedValueTransmuted;
+        return stk->status = PushedValueTransmuted;
 
     return stackVerify(stk);
 }
 
-StackUnit stackPop(Stack* stk, StackError* error){
-    StackError stackError = stackVerify(stk);
-    if (stackError) {
-        if (error)
-            *error = stk->error;
+StackUnit stackPop(Stack* stk, StackStatus* status){
+    StackStatus stackStatus = stackVerify(stk);
+    if (stackStatus) {
+        if (status)
+            *status = stk->status;
         return STACK_POISON;
     }
 
     if (stk->size == 0) {
-        stk->error = NoValueToPop;
-        if (error)
-            *error = stk->error;
+        stk->status = NoValueToPop;
+        if (status)
+            *status = stk->status;
         return STACK_POISON;
     }
 
@@ -148,24 +148,24 @@ StackUnit stackPop(Stack* stk, StackError* error){
     stk->data[CANARY_LEFT_COUNT + stk->size] = 0;
 
     if (stk->size != previousSize - 1) {
-        stk->error = FailDecrement;
-        if (error)
-            *error = stk->error;
+        stk->status = FailDecrement;
+        if (status)
+            *status = stk->status;
         return value;
     }
     if (stk->data[CANARY_LEFT_COUNT + previousSize] != 0) {
-        stk->error = FailPop;
-        if (error)
-            *error = stk->error;
+        stk->status = FailPop;
+        if (status)
+            *status = stk->status;
         return value;
     }
 
-    if (error)
-        *error = stackVerify(stk);
+    if (status)
+        *status = stackVerify(stk);
     return value;
 }
 
-StackError stackDestroy(Stack* stk, bool isAlloced){
+StackStatus stackDestroy(Stack* stk, bool isAlloced){
     if (!stk)
         return NullStackPointer;
 
@@ -178,7 +178,7 @@ StackError stackDestroy(Stack* stk, bool isAlloced){
 
     stk->size = 0;
     stk->capacity = 0;
-    stk->error = DestroyedStack;
+    stk->status = DestroyedStack;
 
     if (isAlloced)
         free(stk);
@@ -186,24 +186,24 @@ StackError stackDestroy(Stack* stk, bool isAlloced){
     return OK;
 }
 
-StackError stackVerify(Stack* stk){
+StackStatus stackVerify(Stack* stk){
     if (!stk)
         return NullStackPointer;
-    if (stk->error)
-        return stk->error;
+    if (stk->status)
+        return stk->status;
     if (!stk->data)
-        return stk->error = NullDataPointer;
+        return stk->status = NullDataPointer;
     if (stk->capacity == 0)
-        return stk->error = BadCapacity;
+        return stk->status = BadCapacity;
     if (stk->size > stk->capacity)
-        return stk->error = BadSize;
-    StackError error = stackCheckCanaries(stk);
-    if (error != OK) 
-        return stk->error = error;
-    return stk->error;
+        return stk->status = BadSize;
+    StackStatus status = stackCheckCanaries(stk);
+    if (status != OK) 
+        return stk->status = status;
+    return stk->status;
 }
 
-StackError stackCheckCanaries(Stack* stk) {
+StackStatus stackCheckCanaries(Stack* stk) {
     for (size_t i = 0; i < CANARY_LEFT_COUNT; i++)
         if (stk->data[i] != CANARY_LEFT) 
             return CorruptedCanary;
@@ -214,17 +214,17 @@ StackError stackCheckCanaries(Stack* stk) {
 }
 
 
-StackError stackExpandCapacity(Stack* stk, size_t additionalCapacity) {
-    StackError stackError = stackVerify(stk);
-    if (stackError)
-        return stackError;
+StackStatus stackExpandCapacity(Stack* stk, size_t additionalCapacity) {
+    StackStatus stackStatus = stackVerify(stk);
+    if (stackStatus)
+        return stackStatus;
 
     StackUnit *tempPtr = (StackUnit*)realloc(stk->data,
                                                  (stk->capacityWithCanaries 
                                                     + additionalCapacity)
                                                  * sizeof(StackUnit));
     if (!tempPtr)
-        return stk->error = FailMemoryReallocation;
+        return stk->status = FailMemoryReallocation;
     memset(tempPtr + CANARY_LEFT_COUNT + stk->capacity, 0, 
            (additionalCapacity + CANARY_RIGHT_COUNT) * sizeof(StackUnit));
     stk->capacityWithCanaries += additionalCapacity;
@@ -259,7 +259,7 @@ void stackDumpInternal(FILE *fileStream, Stack* stk, bool isAdvanced,
         isRandomInitialized = true;
     }
 
-    StackError stackError = stackVerify(stk);
+    StackStatus stackStatus = stackVerify(stk);
     if (stk == NULL) {
         fprintf(fileStream,
                 "-----------------------\n"
@@ -289,7 +289,7 @@ void stackDumpInternal(FILE *fileStream, Stack* stk, bool isAdvanced,
                     stk->size,
                     stk->capacity,
                     stk->capacityWithCanaries,
-                    stk->error == OK ? "" : "[!] ", stk->error);
+                    stk->status == OK ? "" : "[!] ", stk->status);
         } else {
             fprintf(fileStream,
                     "-----------------------\n"
@@ -307,10 +307,10 @@ void stackDumpInternal(FILE *fileStream, Stack* stk, bool isAdvanced,
                     stk->size,
                     stk->capacity,
                     stk->capacityWithCanaries,
-                    stk->error == OK ? "" : "[!] ", stk->error);
+                    stk->status == OK ? "" : "[!] ", stk->status);
         }
 
-        if (stackError == NullDataPointer || stk->data == NULL) {
+        if (stackStatus == NullDataPointer || stk->data == NULL) {
             fprintf(fileStream,
                     "\tdata [NULL] {}\n"
                     "}\n"
