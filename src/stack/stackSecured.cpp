@@ -107,7 +107,7 @@ StackStatus stackExpandCapacity(Stack_t stkID, size_t additionalCapacity) {
 size_t stackGetSize(Stack_t stkID, StackStatus *status) {
     Stack* stk = getStack(stkID);
     if (!stk) {
-        if (status) 
+        if (status)
             *status = InvalidStackID;
         return 0;
     }
@@ -118,7 +118,7 @@ size_t stackGetSize(Stack_t stkID, StackStatus *status) {
 size_t stackGetCapacity(Stack_t stkID, StackStatus* status) {
     Stack* stk = getStack(stkID);
     if (!stk) {
-        if (status) 
+        if (status)
             *status = InvalidStackID;
         return 0;
     }
@@ -134,17 +134,9 @@ size_t stackGetCapacity(Stack_t stkID, StackStatus* status) {
 //     return stk->status;
 // }
 
-#undef stackDump
-void stackDumpSecured(FILE* fileStream, Stack_t stkID,
-                      const char* fileName, int line) {
-    assert(fileStream);
-
-    return stackDump(fileStream, getStack(stkID), false, fileName, line);
-}
-
 StackStatus allocStackManagerData() {
     if (!STACK_MANAGER.data) {
-        Stack** tempPtr = (Stack**)calloc(DEFAULT_INITIAL_STACK_MANAGER_CAPACITY, 
+        Stack** tempPtr = (Stack**)calloc(DEFAULT_INITIAL_STACK_MANAGER_CAPACITY,
                                           sizeof(Stack*));
         if (!tempPtr)
             return FailMemoryAllocation;
@@ -153,12 +145,12 @@ StackStatus allocStackManagerData() {
         STACK_MANAGER.size = 0;
         STACK_MANAGER.data = tempPtr;
     } else if (STACK_MANAGER.size == STACK_MANAGER.capacity) {
-        Stack** tempPtr = (Stack**)realloc(STACK_MANAGER.data, 
-                                           2 * STACK_MANAGER.capacity 
+        Stack** tempPtr = (Stack**)realloc(STACK_MANAGER.data,
+                                           2 * STACK_MANAGER.capacity
                                            * sizeof(Stack*));
         if (!tempPtr)
             return FailMemoryReallocation;
-            
+
         STACK_MANAGER.capacity *= 2;
         STACK_MANAGER.data = tempPtr;
     }
@@ -174,14 +166,14 @@ void freeEmptyStackManager() {
 }
 
 Stack* getStack(Stack_t stkID) {
-    return stkID < 0 || (unsigned int)stkID >= STACK_MANAGER.size 
-           ? NULL 
+    return stkID < 0 || (unsigned int)stkID >= STACK_MANAGER.size
+           ? NULL
            : STACK_MANAGER.data[stkID];
 }
 
-/* 
+/*
     I know that a cast to (int) loses info but I need it to be an int and I dont think
-    someone is making a StackManager that is so large it cannot cope 
+    someone is making a StackManager that is so large it cannot cope
     with unsigned long being cast to int
 */
 int findFreeStackId() {
@@ -195,3 +187,15 @@ int findFreeStackId() {
 
     return stkID == -1 ? (int)STACK_MANAGER.size : stkID;
 }
+
+#ifdef _DEBUG
+
+#undef stackDump
+void stackDumpSecured(FILE* fileStream, Stack_t stkID,
+                      const char* fileName, int line) {
+    assert(fileStream);
+
+    return stackDump(fileStream, getStack(stkID), false, fileName, line);
+}
+
+#endif
