@@ -22,15 +22,15 @@ StackStatus stackInit(Stack* stk, size_t initialCapacity) {
         return AttemptedReinitialization;
     if (initialCapacity == 0)
         return BadInitialCapacity;
-    
-    size_t capacityWithCanaries = initialCapacity + CANARY_LEFT_COUNT 
+
+    size_t capacityWithCanaries = initialCapacity + CANARY_LEFT_COUNT
                                   + CANARY_RIGHT_COUNT;
 
     StackUnit* tempPtr = (StackUnit*)calloc(capacityWithCanaries, sizeof(StackUnit));
     if (!tempPtr) {
         return stk->status = FailMemoryAllocation;
     }
-        
+
     stk->data = tempPtr;
     stk->size = 0;
     stk->capacity = initialCapacity;
@@ -57,7 +57,7 @@ Stack* stackDynamicInit(size_t initialCapacity, StackStatus* status) {
             *status = FailMemoryAllocation;
         return NULL;
     }
-    
+
     *stk = {0};
     if (stackInit(stk, initialCapacity)) {
         if (status)
@@ -79,7 +79,7 @@ StackStatus stackPush(Stack* stk, StackUnit value) {
     if (stk->size == stk->capacity)
         if ((stackStatus = stackExpandCapacity(stk, stk->capacity)))
             return stackStatus;
-    
+
     size_t previousSize = stk->size;
     stk->data[CANARY_LEFT_COUNT + stk->size++] = value;
     if (stk->size != previousSize + 1)
@@ -99,7 +99,7 @@ StackUnit stackPop(Stack* stk, StackStatus* status) {
     }
 
     if (stk->size == 0) {
-        stk->status = NoValueToPop;
+        //stk->status = NoValueToPop;
         if (status)
             *status = stk->status;
         return STACK_POISON;
@@ -160,17 +160,17 @@ StackStatus stackVerify(Stack* stk) {
     if (stk->size > stk->capacity)
         return stk->status = BadSize;
     StackStatus status = stackCheckCanaries(stk);
-    if (status != OK) 
+    if (status != OK)
         return stk->status = status;
     return stk->status;
 }
 
 StackStatus stackCheckCanaries(Stack* stk) {
     for (size_t i = 0; i < CANARY_LEFT_COUNT; i++)
-        if (stk->data[i] != CANARY_LEFT) 
+        if (stk->data[i] != CANARY_LEFT)
             return CorruptedCanary;
     for (size_t i = 0; i < CANARY_RIGHT_COUNT; i++)
-        if (stk->data[stk->capacityWithCanaries - 1 - i] != CANARY_RIGHT) 
+        if (stk->data[stk->capacityWithCanaries - 1 - i] != CANARY_RIGHT)
             return CorruptedCanary;
     return OK;
 }
@@ -182,18 +182,18 @@ StackStatus stackExpandCapacity(Stack* stk, size_t additionalCapacity) {
         return stackStatus;
 
     StackUnit *tempPtr = (StackUnit*)realloc(stk->data,
-                                                 (stk->capacityWithCanaries 
+                                                 (stk->capacityWithCanaries
                                                     + additionalCapacity)
                                                  * sizeof(StackUnit));
     if (!tempPtr)
         return stk->status = FailMemoryReallocation;
-    memset(tempPtr + CANARY_LEFT_COUNT + stk->capacity, 0, 
+    memset(tempPtr + CANARY_LEFT_COUNT + stk->capacity, 0,
            (additionalCapacity + CANARY_RIGHT_COUNT) * sizeof(StackUnit));
     stk->capacityWithCanaries += additionalCapacity;
     stk->capacity += additionalCapacity;
     stk->data = tempPtr;
     for (size_t i = 0; i < CANARY_RIGHT_COUNT; i++)
         stk->data[stk->capacityWithCanaries - 1 - i] = CANARY_RIGHT;
-    
+
     return OK;
 }
