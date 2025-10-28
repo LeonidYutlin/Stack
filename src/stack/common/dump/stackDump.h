@@ -3,14 +3,15 @@
 
 #ifdef _DEBUG
 
+#include <stdio.h>
 #include "../../stack.h"
 
-void stackDump(FILE* fileStream, Stack* stk, bool isAdvanced, 
+void stackDump(FILE* fileStream, Stack* stk, bool isAdvanced,
                const char* fileName, int line);
 #define stackDump(fileStream, stk) \
         stackDump(fileStream, stk, false, __FILE__, __LINE__);
 
-#else 
+#else
 
 #define stackDump(fileStream, stk) ;
 

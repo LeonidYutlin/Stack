@@ -101,7 +101,7 @@ StackUnit stackPop(Stack* stk, StackStatus* status) {
     if (stk->size == 0) {
         //stk->status = NoValueToPop;
         if (status)
-            *status = stk->status;
+            *status = NoValueToPop;
         return STACK_POISON;
     }
 
